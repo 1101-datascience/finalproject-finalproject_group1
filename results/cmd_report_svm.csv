@@ -1,0 +1,14 @@
+AUC,train_AUC,validation_AUC,test_AUC,ACC,train_ACC,validation_ACC,test_ACC,recall,train_recall,test_recall,validation_recall,percion,training_p,test_p,validation_p
+fold1,1,0.56,0.54,fold1,1,0.56,0.49,fold1,1,0.98,0.99,fold1,1,0.98,0.99
+fold2,1,0.52,0.56,fold2,1,0.59,0.58,fold2,1,0.9,0.89,fold2,1,0.9,0.89
+fold3,1,0.5,0.52,fold3,1,0.51,0.55,fold3,1,0.84,0.85,fold3,1,0.84,0.85
+fold4,1,0.49,0.5,fold4,1,0.58,0.51,fold4,1,0.85,0.9,fold4,1,0.85,0.9
+fold5,1,0.53,0.48,fold5,1,0.5,0.57,fold5,1,0.94,0.94,fold5,1,0.94,0.94
+ave.,1,0.52,0.52,ave.,1,0.55,0.54,ave.,1,0.9,0.91,ave.,1,0.9,0.91
+AUC,nu_train_AUC,nu_validation_AUC,nu_test_AUC,ACC,nu_train_ACC,nu_test_ACC,nu_validation_ACC,recall,nu_train_recall,nu_test_recall,nu_validation_recall,percion,nu_training_p,nu_test_p,nu_validation_p
+fold1,0.5,0.5,0.5,fold1,0.56,0.48,0.56,fold1,1,1,1,fold1,1,1,1
+fold2,0.5,0.5,0.5,fold2,0.52,0.56,0.58,fold2,1,1,1,fold2,1,1,1
+fold3,0.5,0.5,0.5,fold3,0.54,0.58,0.52,fold3,1,1,1,fold3,1,1,1
+fold4,0.5,0.5,0.5,fold4,0.54,0.52,0.58,fold4,1,1,1,fold4,1,1,1
+fold5,0.5,0.5,0.5,fold5,0.55,0.58,0.48,fold5,1,1,1,fold5,1,1,1
+ave.,0.5,0.5,0.5,ave.,0.54,0.54,0.54,ave.,1,1,1,ave.,1,1,1
