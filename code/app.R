@@ -52,6 +52,7 @@ ui <- fluidPage(
                         tabsetPanel(
                           tabPanel(h2("RAW data"),
                                    #plotOutput("pcaPlot", width = "100%")
+                                   plotOutput('cor'),
                           ),
                           tabPanel(h2("Data01"),
                                    # verbatimTextOutput("pcaResult")
@@ -117,6 +118,13 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   data(iris)
+  
+  output$cor<-renderPlot({
+    corrplot(abs(cor(iris[1:nrow(iris),1:ncol(iris)-1]))
+             ,method='color',type='full'
+             ,bg='black'
+             ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
+  
   # log.ir <- log(iris[, 1:4])
   # ir.species <- iris[, 5]
   # ir.pca <- prcomp(log.ir,center = TRUE, scale. = TRUE)
