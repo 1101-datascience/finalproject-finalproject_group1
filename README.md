@@ -1,4 +1,4 @@
-# [GroupID] 以股為鏡--台股加權預測
+# [Group] 以股為鏡--台股加權預測
 
 ### Groups
 * name, student ID1
