@@ -84,27 +84,38 @@ ui <- fluidPage(
                                    # verbatimTextOutput("pcaSummary"))
                           ),
                           tabPanel(h2("Naive Bayes"),
+                                   htmlOutput("AUC_nb")
                                    #plotOutput("pcaPlot", width = "100%")
                           ),
                           tabPanel(h2("SVM"),
+                                   htmlOutput("AUC_svm")
                                    # verbatimTextOutput("pcaResult")
                           ),
                           tabPanel(h2("Decision Tree"),
+                                   htmlOutput("AUC_dt")
                                    # verbatimTextOutput("pcaResult")
                           ),
                           tabPanel(h2("Logistic Regression"),
+                                   htmlOutput("AUC_lr")
                                    # verbatimTextOutput("pcaResult")
                           ),
                           tabPanel(h2("Random Forest"),
+                                   htmlOutput("AUC_Rf")
                                    # verbatimTextOutput("pcaResult")
                           ),
                           tabPanel(h2("LSTM"),
+                                   htmlOutput("tloss_lstm"),
+                                   htmlOutput("floss_lstm"),
                                    # verbatimTextOutput("pcaResult")
                           ),
                           tabPanel(h2("CNN"),
+                                   htmlOutput("tloss_cnn"),
+                                   htmlOutput("floss_cnn"),
                                    # verbatimTextOutput("pcaResult")
                           ),
                           tabPanel(h2("TCN"),
+                                   htmlOutput("tloss_tcn"),
+                                   htmlOutput("floss_tcn"),
                                    # verbatimTextOutput("pcaSummary"))
                           )
                           
@@ -162,6 +173,81 @@ server <- function(input, output) {
              ,bg='black'
              ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
   
+  
+  output$AUC_nb <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/NaiveBayes_AUC.png?raw=true",
+        '">')
+    })
+  output$AUC_svm <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/G1_SVM_ROCR_test.jpg?raw=true",
+        '">')
+    })
+  output$AUC_dt <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/G1_Decision%20tree_test.jpeg?raw=true",
+        '">')
+    })
+  output$AUC_lr <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/G1_LogisRegre_AUC_test.jpg?raw=true",
+        '">')
+         })
+  output$AUC_Rf <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/RF_addFeatures_predict_ROC.png?raw=true",
+        '">')
+    })
+  
+  output$AUC_Rf <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/RF_addFeatures_predict_ROC.png?raw=true",
+        '">')
+    })
+  output$tloss_lstm <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/G1_LSTM_Training_Loss.png?raw=true",
+        '">')
+    })
+  output$floss_lstm <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/G1_LSTM_Final_Epoch_Loss.png?raw=true",
+        '">')
+    })
+  
+  output$tloss_cnn <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/G1_CNN_Training_Loss.png?raw=true",
+        '">')
+    })
+  output$floss_cnn <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/G1_CNN_Final_Epoch_Loss.png?raw=true",
+        '">')
+    })
+  output$tloss_tcn <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/G1_TCN_Training_Loss.png?raw=true",
+        '">')
+    })
+  output$floss_tcn <-
+    renderText({
+      c('<img src="',
+        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/G1_TCN_Final_Epoch_Loss.png?raw=true",
+        '">')
+    })
   # log.ir <- log(iris[, 1:4])
   # ir.species <- iris[, 5]
   # ir.pca <- prcomp(log.ir,center = TRUE, scale. = TRUE)
@@ -201,6 +287,10 @@ server <- function(input, output) {
   output$caColContribPlot <- renderPlot(
     fviz_contrib(ir.ca(), choice = "col", axes = input$Dstart:input$Dend,fill = "#9A8E8E",color = "black")
   )
+  
+  
+  
+  
 }
 
 # Create Shiny app ----
