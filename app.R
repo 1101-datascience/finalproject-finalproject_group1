@@ -1,11 +1,8 @@
 
 library(shiny)
-library(ggbiplot)
-library(ca)
 library(DT)
-library("FactoMineR")
 library("corrplot")
-library("factoextra")
+library(ggplot2)
 library(reactable)
 data <- read.csv("data/ourdata.csv", header = T)
 data<-data.frame(data)
@@ -194,10 +191,6 @@ ui <- fluidPage(
              ),
              tabPanel(p("Result", style = "color:#6A3E3E;font-size: 25px;font-family: Century Gothic, sans-serif;font-weight: bold"),
                       tags$style(type='text/css', '#pcaResult,#pcaSummary,#caData{background-color: white; color: #756767;font-family: Consolas;font-weight: bold;font-size: 12px}'),
-                      #titlePanel(h1("Stock Prediction Evaluation")),
-                      # sidebarPanel(
-                      #   selectInput("selectdata","Select Data Set:",c("Raw Data" = 1,"Only Diff" = 2),selected = 1)
-                      # ),
                       mainPanel(
                         tabsetPanel(
                           tabPanel(h2("Overview"),
@@ -329,11 +322,9 @@ ui <- fluidPage(
     
                           )
                           
-                          
                         )
                       )
              )
-             
   )
 )
 
