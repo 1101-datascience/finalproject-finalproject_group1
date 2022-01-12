@@ -633,6 +633,10 @@ library(randomForest)
 library(e1071)
 library(lattice)
 library(gridExtra)
+library(shiny)
+library(DT)
+library("corrplot")
+library(reactable)
 ```
 
 ### Related publications
