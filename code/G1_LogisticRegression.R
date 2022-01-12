@@ -197,7 +197,12 @@ write.table(df_02, rep_f, sep = ",",
             append = TRUE, quote = FALSE,
             col.names = TRUE, row.names = FALSE)
 
-png(filename="image/G1_LogisRegre_AUC_Model.jpg")
+png(filename="image/G1_LogisRegre_AUC_train.jpg")
+plot(roc(train.data02, train.pred02), main = "Logistic Regression Training Prediction",col="red",plot=TRUE, grid=TRUE,
+     print.auc=TRUE)
+
+dev.off()
+png(filename="image/G1_LogisRegre_AUC_test.jpg")
 plot(roc(test.data02, test.pred02), main = "Logistic Regression Testing Prediction",col="red",plot=TRUE, grid=TRUE,
      print.auc=TRUE)
 
