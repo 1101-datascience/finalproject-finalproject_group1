@@ -300,21 +300,40 @@ list <- c(16, 9, 10, 11, 2, 18, 19)
 myTrain_byAcc <- d_[list]
 myTest_byAcc <- myTest_norm[list]
 
+#building new model
 rf_model_varImp2 <- randomForest(factor(TAIEX..t.) ~ ., data = myTrain_byAcc,importance=TRUE, ntree=1000, nodesize=7)
-myPrediction_rf <- predict(rf_model_varImp2, newdata = myTrain_byAcc, 'prob')
-accuracyMeasures(myPrediction_rf[,2], myTrain_byAcc$TAIEX..t., name="random forest, test")
 
-myPrediction_rf <- predict(rf_model_varImp2, newdata = myTest_byAcc, 'prob')
-accuracyMeasures(myPrediction_rf[,2], myTest_byAcc$TAIEX..t., name="random forest, test")
+#training data
+myPrediction_rf_training_AUC <- predict(rf_model_varImp2, newdata = myTrain_byAcc, 'prob')
+#accuracyMeasures(myPrediction_rf_training[,2], myTrain_byAcc$TAIEX..t., name="random forest, test")
+
+myPrediction_rf_training <- predict(rf_model_varImp2, newdata = myTrain_byAcc)
+myTable <- table(as.factor(myPrediction_rf_training), as.factor(myTrain_byAcc$TAIEX..t.))
+myAccuracy_Training <- sum(diag(myTable))/sum(myTable)
+myRecall_Training <- myTable[2,2]/sum(myTable[,2])
+myPrecision_Training <- myTable[2,2]/sum(myTable[2,])
+
+modelroc <- roc(myTrain_byAcc$TAIEX..t.,myPrediction_rf_training_AUC[,2])
+myAUC_Training <- modelroc$auc[1]
+
+#100 testing data
+myPrediction_rf_testing_AUC <- predict(rf_model_varImp2, newdata = myTest_byAcc, 'prob')
+#accuracyMeasures(myPrediction_rf_testing[,2], myTest_byAcc$TAIEX..t., name="random forest, test")
+
+myPrediction_rf_testing <- predict(rf_model_varImp2, newdata = myTest_byAcc)
+myTable <- table(as.factor(myPrediction_rf_testing), as.factor(myTest_byAcc$TAIEX..t.))
+myAccuracy_Testing <- sum(diag(myTable))/sum(myTable)
+myRecall_Testing <- myTable[2,2]/sum(myTable[,2])
+myPrecision_Testing <- myTable[2,2]/sum(myTable[2,])
+
+modelroc <- roc(myTest_byAcc$TAIEX..t.,myPrediction_rf_testing_AUC[,2])
+myAUC_Testing <- modelroc$auc[1]
 
 png(filename="varImp_rf_reTrain.png")
 varImp <- importance(rf_model_varImp2)
 head(varImp)
 varImpPlot(rf_model_varImp2, type=1)
 dev.off()
-
-modelroc <- roc(myTest_byAcc$TAIEX..t.,myPrediction_rf[,2])
-myAUC <- modelroc$auc[1]
 
 png(filename="RF_test_predict_ROC.png")
 perf = prediction(myPrediction_rf[,2], myTest_byAcc$TAIEX..t.)
@@ -363,8 +382,14 @@ df_null <- data.frame(AUC=c(myFolds,"ave."),
                     null_Validation=round(c(null_Recall_Validating,mean(null_Recall_Validating)),2),
                     null_Testing=round(c(null_Recall_Testing,mean(null_Recall_Testing)),2))
 
+df_rf_evaluation <- data.frame(Data=c('training data','100 testing data'), 
+                               Accuracy=c(myAccuracy_Training,myAccuracy_Testing),
+                               Recall=c(myRecall_Training,myRecall_Testing),
+                               Precision=c(myPrecision_Training,myPrecision_Testing),
+                               AUC=c(myAUC_Training,myAUC_Testing))
 rownames(df_rf)<-NULL
 rownames(df_null)<-NULL
 
 write.table(df_rf, ReportFile, quote=FALSE,row.names=FALSE, sep=",")
 write.table(df_null, ReportFile, quote=FALSE,row.names=FALSE, append=TRUE, sep=",")
+write.table(df_rf_evaluation, 'rf_final_evaluation.csv', quote=FALSE,row.names=FALSE, sep=",")
