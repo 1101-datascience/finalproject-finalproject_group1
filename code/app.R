@@ -44,6 +44,13 @@ ui <- fluidPage(
         color:#856A6A;
         font-size: 18px;
         font-weight: bold
+       }
+      h3 {
+        font-family: Century Gothic, 
+        sans-serif;
+        color:#856A6A;
+        font-size: 15px;
+        font-weight: bold
       }
       .shiny-input-container {
         color: #403B3B;
