@@ -47,7 +47,7 @@ ui <- fluidPage(
   navbarPage(p("Stock Prediction", style = "color:#6A3E3E;font-size: 25px;font-family: Century Gothic, sans-serif;font-weight: bold"),
              tabPanel(p("Dataset", style = "color:#6A3E3E;font-size: 25px;font-family: Century Gothic, sans-serif;font-weight: bold"),
                       #titlePanel(h1("Data: Iris dataset")),
-                      #mainPanel(datatable(iris))
+                      mainPanel(datatable(data)),
                       mainPanel(
                         tabsetPanel(
                           tabPanel(h2("RAW data"),
@@ -118,14 +118,15 @@ ui <- fluidPage(
 
 server <- function(input, output) {
  # data(iris)
-  data <- read.csv("//data/ourdata.csv", header = T)
-#  data<-data.frame(data)
+  data <- read.csv("../data/ourdata.csv", header = T)
+  data<-data.frame(data)
 
-  names(data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
-  data <- data[-6]
-  data <- data[-1]
+ 
   
   output$cor<-renderPlot({
+    names(data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
+    data <- data[-6]
+    data <- data[-1]
     corrplot(abs(cor(data[1:nrow(data),1:(ncol(data)-1)]))
              ,method='color',type='full'
              ,bg='black'
