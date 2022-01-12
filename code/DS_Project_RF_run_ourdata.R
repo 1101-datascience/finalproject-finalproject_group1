@@ -90,14 +90,14 @@ MostFreq <- function(x) {
   ux[which.max(tabulate(match(x, ux)))]
 }
 
-#k <- as.numeric(k)
+k <- as.numeric(k)
 
 ########################################
-k <- 5
-TrainFile <- c('dataset/ourdata.csv')
-TestFile <- c('dataset/ourdata.csv')
-ReportFile <- c('performance.csv')
-PredictFile <- c('predict.csv')
+#k <- 5
+#TrainFile <- c('dataset/ourdata.csv')
+#TestFile <- c('dataset/ourdata.csv')
+#ReportFile <- c('performance.csv')
+#PredictFile <- c('predict.csv')
 ########################################
 
 
