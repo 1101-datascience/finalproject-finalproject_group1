@@ -10,6 +10,12 @@ library("factoextra")
 data <- read.csv("../data/ourdata.csv", header = T)
 data<-data.frame(data)
 
+diff_data <- read.csv("../data/only_diff.csv", header = T)
+diff_data<-data.frame(diff_data)
+
+add_features_data <- read.csv("../data/ourdata_addFeatures5.csv", header = T)
+add_features_data<-data.frame(add_features_data)
+
 overview_cros <- read.csv("../results/CROSS_OVERVIEW.csv", header = T)
 
 ui <- fluidPage(
@@ -57,15 +63,21 @@ ui <- fluidPage(
                     #  mainPanel(datatable(data)),
                       mainPanel(
                         tabsetPanel(
-                          tabPanel(h2("RAW data"),
+                          tabPanel(h2("RAW Data"),
                                    #plotOutput("pcaPlot", width = "100%")
                                    datatable(data),
+                                   h3("Data Correlations"),
                                    plotOutput('cor')
                           ),
-                          tabPanel(h2("Data01"),
+                          tabPanel(h2("Only Diff"),
+                                   datatable(diff_data),
+                                   h3("Data Correlations"),
+                                   plotOutput('cor_diff')
                                    # verbatimTextOutput("pcaResult")
                           ),
-                          tabPanel(h2("Data02"),
+                          tabPanel(h2("Data add Feature"),
+                                   datatable(add_features_data),
+                                   plotOutput('cor_add')
                                    # verbatimTextOutput("pcaSummary"))
                           )
                           
@@ -169,6 +181,26 @@ server <- function(input, output) {
     data <- data[-6]
     data <- data[-1]
     corrplot(abs(cor(data[1:nrow(data),1:(ncol(data)-1)]))
+             ,method='color',type='full'
+             ,bg='black'
+             ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
+  output$cor_diff<-renderPlot({
+    names(diff_data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
+    diff_data <- diff_data[-6]
+    diff_data <- diff_data[-1]
+    corrplot(abs(cor(diff_data[1:nrow(diff_data),1:(ncol(diff_data)-1)]))
+             ,method='color',type='full'
+             ,bg='black'
+             ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
+  output$cor_add<-renderPlot({
+    
+    names(add_features_data)<-c(
+                                "Date"               ,  "SOX_Close"          ,"SOX_Close_log"       ,"Jones_Close"    ,"Dow.Jones_Close_log",
+                                "NASDAQ_Close"       ,"NASDAQ_Close_log"    ,"S_P_500_Close."     , "S_P_500_Close_log"   ,"total_net_tsmc"    ,
+                               "Bitcoin_Change" ,   "up_sum"           ,        "SOX_Close_up"        ,"Dow.Jones_Close_up","NASDAQ_Close_up","Bitcoin_Change_up","S_P_500_Close_up","total_net_tsmc_.up","TAIEX_before"  ,"TAIEX"               
+                                )
+    add_features_data<-add_features_data[,2:12]
+    corrplot(abs(cor(add_features_data[1:nrow(add_features_data),1:(ncol(add_features_data)-1)]))
              ,method='color',type='full'
              ,bg='black'
              ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
