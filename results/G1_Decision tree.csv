@@ -1,9 +1,0 @@
-Accuracy,training,validation,test,Precision,training,validation,test,Recall,training,validation,test,Auc,training,validation,test
-fold1,0.65,0.57,0.69,fold1,0.75,0.64,0.7,fold1,0.51,0.45,0.82,fold1,0.69,0.6,0.68
-fold2,0.7,0.56,0.63,fold2,0.69,0.59,0.63,fold2,0.81,0.65,0.75,fold2,0.73,0.61,0.63
-fold3,0.67,0.67,0.58,fold3,0.67,0.66,0.6,fold3,0.77,0.85,0.69,fold3,0.68,0.66,0.59
-fold4,0.66,0.63,0.64,fold4,0.65,0.61,0.64,fold4,0.81,0.77,0.77,fold4,0.66,0.68,0.63
-fold5,0.66,0.63,0.63,fold5,0.67,0.69,0.62,fold5,0.72,0.67,0.72,fold5,0.7,0.64,0.67
-ave.,0.67,0.62,0.62,ave.,0.67,0.64,0.62,ave.,0.78,0.74,0.73,ave.,0.69,0.65,0.63
-,,,,,,,,,,,,,,,
-Accuracy,0.57,Precision,0.56,Recall,0.68,Auc,0.58,,,,,,,,
