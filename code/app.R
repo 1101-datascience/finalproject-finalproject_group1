@@ -67,7 +67,8 @@ ui <- fluidPage(
                                    #plotOutput("pcaPlot", width = "100%")
                                    datatable(data),
                                    h3("Data Correlations"),
-                                   plotOutput('cor')
+                                   plotOutput('cor'),
+                                   plotOutput('boxplot_data')
                           ),
                           tabPanel(h2("Only Diff"),
                                    datatable(diff_data),
@@ -178,17 +179,17 @@ server <- function(input, output) {
   
   output$cor<-renderPlot({
     names(data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
-    data <- data[-6]
-    data <- data[-1]
-    corrplot(abs(cor(data[1:nrow(data),1:(ncol(data)-1)]))
+    data1 <- data[-6]
+    data1<- data1[-1]
+    corrplot(abs(cor(data1[1:nrow(data1),1:(ncol(data1)-1)]))
              ,method='color',type='full'
              ,bg='black'
              ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
   output$cor_diff<-renderPlot({
     names(diff_data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
-    diff_data <- diff_data[-6]
-    diff_data <- diff_data[-1]
-    corrplot(abs(cor(diff_data[1:nrow(diff_data),1:(ncol(diff_data)-1)]))
+    diff_data1 <- diff_data[-6]
+    diff_data1 <- diff_data1[-1]
+    corrplot(abs(cor(diff_data1[1:nrow(diff_data1),1:(ncol(diff_data1)-1)]))
              ,method='color',type='full'
              ,bg='black'
              ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
@@ -199,11 +200,21 @@ server <- function(input, output) {
                                 "NASDAQ_Close"       ,"NASDAQ_Close_log"    ,"S_P_500_Close."     , "S_P_500_Close_log"   ,"total_net_tsmc"    ,
                                "Bitcoin_Change" ,   "up_sum"           ,        "SOX_Close_up"        ,"Dow.Jones_Close_up","NASDAQ_Close_up","Bitcoin_Change_up","S_P_500_Close_up","total_net_tsmc_.up","TAIEX_before"  ,"TAIEX"               
                                 )
-    add_features_data<-add_features_data[,2:12]
-    corrplot(abs(cor(add_features_data[1:nrow(add_features_data),1:(ncol(add_features_data)-1)]))
+    add_features_data1<-add_features_data[,2:12]
+    corrplot(abs(cor(add_features_data1[1:nrow(add_features_data1),1:(ncol(add_features_data1))]))
              ,method='color',type='full'
              ,bg='black'
              ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
+  
+  output$boxplot_data<-renderPlot({
+    # names(data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
+  names(data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
+    
+    data1 <- data[-6]
+    data1<- data1[-1]
+    boxplot(data[1:nrow(data),1:(ncol(data)-1)])
+    
+  })
   
   
   output$AUC_nb <-
