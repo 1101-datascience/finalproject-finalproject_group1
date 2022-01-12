@@ -68,19 +68,22 @@ ui <- fluidPage(
                                    datatable(data),
                                    h3("Data Correlations"),
                                    plotOutput('cor'),
-                                   plotOutput('boxplot_data')
+                                   plotOutput('boxplot_data'),
+                                   verbatimTextOutput('summary_data')
                           ),
                           tabPanel(h2("Only Diff"),
                                    datatable(diff_data),
                                    h3("Data Correlations"),
                                    plotOutput('cor_diff'), 
-                                   plotOutput('boxplot_diff')
+                                   plotOutput('boxplot_diff'),
+                                   verbatimTextOutput('summary_diff')
                                    # verbatimTextOutput("pcaResult")
                           ),
                           tabPanel(h2("Data add Feature"),
                                    datatable(add_features_data),
                                    plotOutput('cor_add'),
-                                   plotOutput('boxplot_add')
+                                   plotOutput('boxplot_add'),
+                                   verbatimTextOutput('summary_add')
                                    # verbatimTextOutput("pcaSummary"))
                           )
                           
@@ -234,7 +237,9 @@ server <- function(input, output) {
     boxplot(add_features_data1[1:nrow(add_features_data1),1:(ncol(add_features_data1))])
     })
   
-  
+  output$summary_data<-renderPrint({ summary(data)})
+  output$summary_diff<-renderPrint({ summary(diff_data)})
+  output$summary_add<-renderPrint({ summary(add_features_data)})
   output$AUC_nb <-
     renderText({
       c('<img src="',
