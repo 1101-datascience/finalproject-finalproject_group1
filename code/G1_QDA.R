@@ -8,7 +8,7 @@ library(pROC)
 
 args <- commandArgs(trailingOnly = TRUE)
 
-#??old, train, test, report, predict??ndex
+
 input_index <- -1
 output_index <- -1
 
@@ -19,17 +19,17 @@ for (i in 1:length(args)) {
     output_index <- i
 }
 
-#蝣箏??old, train, test, report, predict
+
 if( (input_index == -1) || (output_index == -1) )
   stop("Missing --input or  --ouput", call.=FALSE)
 
 
-#蝯西?????楝敺?
+
 input_path <- args[input_index+1]
 output_path <- args[output_index+1]
 
 print(input_path)
-#蝣箏??train file
+
 if(!file.exists(input_path)) {
   stop("No such train file", call.=FALSE)
 }
@@ -54,12 +54,12 @@ df[,2] <- df[,2]-min(df[,2])/(max(df[,2])-min(df[,2]))
 df[,3] <- df[,3]-min(df[,3])/(max(df[,3])-min(df[,3]))
 df[,5] <- df[,5]-min(df[,5])/(max(df[,5])-min(df[,5]))
 
-# 璅???
+
 df[,4] <- (df[,4] - mean(df[,4])) / sd(df[,4])
 df[,6] <- (df[,6] - mean(df[,6])) / sd(df[,6])
 
 
-#敺?100
+
 testing_set <- df[(nrow(df)-99):nrow(df),]
 
 
@@ -215,15 +215,15 @@ all_test_Matrix <- table(res, testing_y)
 
 
 # Test_accuracy
-all_single_test_accuracy = ((test_Matrix[1,1]+test_Matrix[2,2])/dim(testing_set)[1])
+all_single_test_accuracy = ((all_test_Matrix[1,1]+all_test_Matrix[2,2])/dim(df)[1])
 all_single_test_accuracy <- round(all_single_test_accuracy,2)
 
 # Test_recall
-all_single_testing_recall <- (test_Matrix[2,2]/(test_Matrix[2,1]+test_Matrix[2,2]))
+all_single_testing_recall <- (all_test_Matrix[2,2]/(all_test_Matrix[2,1]+all_test_Matrix[2,2]))
 all_single_testing_recall <- round(all_single_testing_recall,2)
 
 # Test_precision
-all_single_testing_precision <- (test_Matrix[2,2]/(test_Matrix[1,2]+test_Matrix[2,2]))
+all_single_testing_precision <- (all_test_Matrix[2,2]/(all_test_Matrix[1,2]+all_test_Matrix[2,2]))
 all_single_testing_precision <- round(all_single_testing_precision,2)
 
 
@@ -251,7 +251,7 @@ split_predict_output_path <- strsplit(output_path,split='/', fixed=TRUE)
 predice_output_With_no_filename <- sapply(split_predict_output_path, head, -1)
 output_performance_filename <- sapply(split_predict_output_path, tail, 1)
 
-#頛詨頝臬??摮嚗???????冗
+
 if(is.character(predice_output_With_no_filename)) {
   for(i in 1:length(predice_output_With_no_filename)) {
     if(dir.exists(predice_output_With_no_filename[i])) {
@@ -264,7 +264,7 @@ if(is.character(predice_output_With_no_filename)) {
   }
 }
 
-write.csv(output, file = output_path, row.names = F, quote = F)
+#write.csv(output, file = output_path, row.names = F, quote = F)
 
-#write.csv(output, file = 'G1_QDA.csv', row.names = F, quote = F)
+write.csv(output, file = 'G1_QDA.csv', row.names = F, quote = F)
 
