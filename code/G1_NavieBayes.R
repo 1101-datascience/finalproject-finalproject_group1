@@ -104,7 +104,6 @@ test_null_precision_list  <- c()
 
 for(i in 1:k){
   if(i == 1) {
-    # ???機????????????
     Validation_set <- subset(df, df$V1 <= (i/k))
     train_set <- subset(df, df$V1 > (i/k) )
   }
@@ -185,8 +184,8 @@ for(i in 1:k){
 
 
 all_nb_model <- naiveBayes(as.factor(df[,7]) ~., data=df[,1:6])
-model_Pred <- predict(all_nb_model, testing_set[,1:6])
-null_test_Matrix <- table(testing_set$TAIEX, model_Pred)
+model_Pred <- predict(all_nb_model, df[,1:6])
+null_test_Matrix <- table(df$TAIEX, model_Pred)
 print(null_test_Matrix)
 
 # All_Test_accuracy
@@ -231,7 +230,7 @@ split_predict_output_path <- strsplit(output_path,split='/', fixed=TRUE)
 predice_output_With_no_filename <- sapply(split_predict_output_path, head, -1)
 output_performance_filename <- sapply(split_predict_output_path, tail, 1)
 
-
+#輸出路???是???存在，??????在????????????夾
 if(is.character(predice_output_With_no_filename)) {
   for(i in 1:length(predice_output_With_no_filename)) {
     if(dir.exists(predice_output_With_no_filename[i])) {
@@ -244,5 +243,5 @@ if(is.character(predice_output_With_no_filename)) {
   }
 }
 
-write.csv(output, file = 'G1_NaiveBayes.csv', row.names = F, quote = F)
-#write.csv(output, file = output_path, row.names = F, quote = F)
+#write.csv(output, file = 'G1_NaiveBayes.csv', row.names = F, quote = F)
+write.csv(output, file = output_path, row.names = F, quote = F)
