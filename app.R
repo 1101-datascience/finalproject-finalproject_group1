@@ -7,22 +7,22 @@ library("FactoMineR")
 library("corrplot")
 library("factoextra")
 library(reactable)
-data <- read.csv("../data/ourdata.csv", header = T)
+data <- read.csv("data/ourdata.csv", header = T)
 data<-data.frame(data)
 
-diff_data <- read.csv("../data/only_diff.csv", header = T)
+diff_data <- read.csv("data/only_diff.csv", header = T)
 diff_data<-data.frame(diff_data)
 
-add_features_data <- read.csv("../data/ourdata_addFeatures5.csv", header = T)
+add_features_data <- read.csv("data/ourdata_addFeatures5.csv", header = T)
 add_features_data<-data.frame(add_features_data)
 
-overview_cros_train <- read.csv("../results/overview_cros_train.csv", header = T)
-overview_cros_valid <- read.csv("../results/overview_cros_vaild.csv", header = T)
-overview_final_train <- read.csv("../results/overview_final_train.csv", header = T)
-overview_final_test <- read.csv("../results/overview_final_test.csv", header = T)
+overview_cros_train <- read.csv("results/overview_cros_train.csv", header = T)
+overview_cros_valid <- read.csv("results/overview_cros_vaild.csv", header = T)
+overview_final_train <- read.csv("results/overview_final_train.csv", header = T)
+overview_final_test <- read.csv("results/overview_final_test.csv", header = T)
 
-cros_overview <- read.csv("../results/cros_overview.csv", header = T)
-final_overview <- read.csv("../results/final_overview.csv", header = T)
+cros_overview <- read.csv("results/cros_overview.csv", header = T)
+final_overview <- read.csv("results/final_overview.csv", header = T)
 rownames(cros_overview) <- as.matrix(cros_overview[1])
 rownames(final_overview ) <- as.matrix(final_overview [1])
 cros_overview <- cros_overview[-1]
@@ -148,6 +148,10 @@ ui <- fluidPage(
                                    br(),
                                    datatable(diff_data),
                                    br(),
+                                   br(),br(),
+                                   br(),br(),
+                                   br(),br(),
+                                  hr(),hr(),
                                    br(),
                                    div("Data Correlations", style = "text-align: center; 
                   background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
@@ -492,16 +496,11 @@ server <- function(input, output) {
   output$AUC_Rf <-
     renderText({
       c('<img src="',
-        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/RF_addFeatures_predict_ROC.png?raw=true",
+        "https://github.com/YungRuJeng/data_science_template/blob/9eb7f9862f9768a80598e8c8bd8d31f4a9854623/G1_RF_AUC_testing.png?raw=true",
         '">')
     })
   
-  output$AUC_Rf <-
-    renderText({
-      c('<img src="',
-        "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/RF_addFeatures_predict_ROC.png?raw=true",
-        '">')
-    })
+
   output$tloss_lstm <-
     renderText({
       c('<img src="',
