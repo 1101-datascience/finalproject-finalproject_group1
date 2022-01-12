@@ -335,16 +335,26 @@ head(varImp)
 varImpPlot(rf_model_varImp2, type=1)
 dev.off()
 
-png(filename="RF_test_predict_ROC.png")
-perf = prediction(myPrediction_rf[,2], myTest_byAcc$TAIEX..t.)
+#png(filename="RF_test_predict_ROC.png")
+#perf = prediction(myPrediction_rf[,2], myTest_byAcc$TAIEX..t.)
 # 1. Area under curve
-auc = performance(perf, "auc")
-auc
+#auc = performance(perf, "auc")
+#auc
 # 2. True Positive and Negative Rate
-pred3 = performance(perf, "tpr","fpr")
+#pred3 = performance(perf, "tpr","fpr")
 # 3. Plot the ROC curve
-plot(pred3,main="ROC Curve for Random Forest",col=2,lwd=2)
-abline(a=0,b=1,lwd=2,lty=2,col="gray")
+#plot(pred3,main="ROC Curve for Random Forest",col=2,lwd=2,plot=TRUE, grid=TRUE, print.auc=TRUE)
+#abline(a=0,b=1,lwd=2,lty=2,col="gray")
+#dev.off()
+
+#training AUC
+png(filename="G1_RF_AUC_training.png")
+plot(roc(myTrain_byAcc$TAIEX..t., myPrediction_rf_training_AUC[,2]), main = "Random Forest Training Prediction",col="red",plot=TRUE, grid=TRUE,print.auc=TRUE)
+dev.off()
+
+#testing AUC
+png(filename="G1_RF_AUC_testing.png")
+plot(roc(myTest_byAcc$TAIEX..t., myPrediction_rf_testing_AUC[,2]), main = "Random Forest Testing Prediction",col="red",plot=TRUE, grid=TRUE,print.auc=TRUE)
 dev.off()
 
 ##########
