@@ -35,7 +35,7 @@ if(!file.exists(input_path)) {
 }
 
 df <- read.csv(input_path, header=T)
-#df <- read.csv('ourdata.csv', header=T)
+df <- read.csv('ourdata.csv', header=T)
 
 
 #後100
@@ -151,7 +151,7 @@ train_nullmodel <- rbinom(dim(df)[1], 1, 0.5)
 train_label <- df$TAIEX
 all_train_null_Matrix <- table(train_label,train_nullmodel)
 
-plot(roc(df[,7],train_label), print.auc=TRUE)
+plot(roc(df[,7],train_nullmodel), print.auc=TRUE)
 
 # Test_accuracy
 all_single_test_accuracy = ((all_train_null_Matrix[1,1]+all_train_null_Matrix[2,2])/dim(df)[1])
