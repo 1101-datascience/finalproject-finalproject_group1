@@ -230,7 +230,7 @@ split_predict_output_path <- strsplit(output_path,split='/', fixed=TRUE)
 predice_output_With_no_filename <- sapply(split_predict_output_path, head, -1)
 output_performance_filename <- sapply(split_predict_output_path, tail, 1)
 
-#輸出路???是???存在，??????在????????????夾
+
 if(is.character(predice_output_With_no_filename)) {
   for(i in 1:length(predice_output_With_no_filename)) {
     if(dir.exists(predice_output_With_no_filename[i])) {
