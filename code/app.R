@@ -6,6 +6,12 @@ library(DT)
 library("FactoMineR")
 library("corrplot")
 library("factoextra")
+
+data <- read.csv("../data/ourdata.csv", header = T)
+data<-data.frame(data)
+
+overview_cros <- read.csv("../results/CROSS_OVERVIEW.csv", header = T)
+
 ui <- fluidPage(
   title = "Data Science Final Project - Group 1",
   tags$head(
@@ -53,7 +59,8 @@ ui <- fluidPage(
                         tabsetPanel(
                           tabPanel(h2("RAW data"),
                                    #plotOutput("pcaPlot", width = "100%")
-                                   plotOutput('cor'),
+                                   datatable(data),
+                                   plotOutput('cor')
                           ),
                           tabPanel(h2("Data01"),
                                    # verbatimTextOutput("pcaResult")
