@@ -4,7 +4,7 @@
 #Author : Zhang-HaoBo
 #################
 
-#library(pROC)
+library(pROC)
 
 args <- commandArgs(trailingOnly = TRUE)
 
@@ -97,7 +97,7 @@ for(i in 1:k){
   # Train_Null_accuracy
   single_null_train_accuracy = ((train_null_Matrix[1,1]+train_null_Matrix[2,2])/dim(train_set)[1])
   train_null_accurcy_list <- c(train_null_accurcy_list, round(single_null_train_accuracy, 2))
-
+  
   # Train_null_recall
   single_null_train_recall = (train_null_Matrix[2,2]/(train_null_Matrix[2,1]+train_null_Matrix[2,2]))
   train_null_recall_list <- c(train_null_recall_list, round(single_null_train_recall, 2))
@@ -147,20 +147,40 @@ for(i in 1:k){
   fold_list <- c(fold_list, paste("fold",i))
 }
 
-output_fold_list <- c(fold_list,'ave.')
+train_nullmodel <- rbinom(dim(df)[1], 1, 0.5)
+train_label <- df$TAIEX
+all_train_null_Matrix <- table(train_label,train_nullmodel)
+
+plot(roc(df[,7],train_label), print.auc=TRUE)
+
+# Test_accuracy
+all_single_test_accuracy = ((all_train_null_Matrix[1,1]+all_train_null_Matrix[2,2])/dim(df)[1])
+all_single_test_accuracy <- round(all_single_test_accuracy,2)
+
+# Test_recall
+all_single_testing_recall <- (all_train_null_Matrix[2,2]/(all_train_null_Matrix[2,1]+all_train_null_Matrix[2,2]))
+all_single_testing_recall <- round(all_single_testing_recall,2)
+
+# Test_precision
+all_single_testing_precision <- (all_train_null_Matrix[2,2]/(all_train_null_Matrix[1,2]+all_train_null_Matrix[2,2]))
+all_single_testing_precision <- round(all_single_testing_precision,2)
+
+
+
+output_fold_list <- c(fold_list,'ave.', ' ', ' ', ' ', ' ')
 
 #Null Model
-output_null_train_accuracy_list <- c(train_null_accurcy_list, round(mean(train_null_accurcy_list),2 ))
-output_null_validation_accurcy_list <- c(validation_null_accurcy_list, round(mean(validation_null_accurcy_list), 2))
-output_null_testing_accurcy_list <- c(test_null_accurcy_list, round(mean(test_null_accurcy_list), 2))
+output_null_train_accuracy_list <- c(train_null_accurcy_list, round(mean(train_null_accurcy_list),2 ), ' ',' ', 'Accuracy', all_single_test_accuracy)
+output_null_validation_accurcy_list <- c(validation_null_accurcy_list, round(mean(validation_null_accurcy_list), 2), ' ', ' ', ' ', ' ')
+output_null_testing_accurcy_list <- c(test_null_accurcy_list, round(mean(test_null_accurcy_list), 2), ' ', ' ', ' ', ' ')
 
-output_null_train_recall_list <- c(train_null_recall_list, round(mean(train_null_recall_list),2 ))
-output_null_validation_recall_list <- c(validation_null_recall_list, round(mean(validation_null_recall_list),2 ))
-output_null_test_recall_list <- c(test_null_recall_list, round(mean(test_null_recall_list),2 ))
+output_null_train_recall_list <- c(train_null_recall_list, round(mean(train_null_recall_list),2 ),' ',' ', 'Recall', all_single_testing_recall)
+output_null_validation_recall_list <- c(validation_null_recall_list, round(mean(validation_null_recall_list),2 ), ' ', ' ', ' ', ' ')
+output_null_test_recall_list <- c(test_null_recall_list, round(mean(test_null_recall_list),2 ), ' ', ' ', ' ', ' ')
 
-output_null_train_precision_list <- c(train_null_precision_list, round(mean(train_null_precision_list),2 ))
-output_null_validation_precision_list <- c(validation_null_precision_list, round(mean(validation_null_precision_list),2 ))
-output_null_test_precision_list <- c(test_null_precision_list, round(mean(test_null_precision_list),2 ))
+output_null_train_precision_list <- c(train_null_precision_list, round(mean(train_null_precision_list),2 ), ' ',' ', 'Precision', all_single_testing_precision)
+output_null_validation_precision_list <- c(validation_null_precision_list, round(mean(validation_null_precision_list),2 ), ' ', ' ', ' ', ' ')
+output_null_test_precision_list <- c(test_null_precision_list, round(mean(test_null_precision_list),2 ), ' ', ' ', ' ', ' ')
 
 
 null_output <- data.frame(Accuracy= output_fold_list, 
@@ -194,3 +214,6 @@ if(is.character(predice_output_With_no_filename)) {
 }
 
 write.csv(null_output, file = output_path, row.names = F, quote = F)
+#write.csv(null_output, file = 'G1_Null_Model.csv', row.names = F, quote = F)
+
+
