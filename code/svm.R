@@ -34,6 +34,8 @@ k<-5
 
 
 train_data <- read.csv(train_path)
+
+train_data$TAIEX..t.<-as.factor(train_data$TAIEX..t.)
 test_set <- train_data[(nrow(train_data)-99):nrow(train_data),1:ncol(train_data)]
 train_data <-  train_data[1:(nrow(train_data)-100),1:ncol(train_data)]
 # train_data<-train_data[,2:ncol(train_data)]
@@ -44,30 +46,30 @@ set <- c()
 training_AUC <- c()
 validation_AUC <- c()
 # test_AUC<-c()
-nu_training_AUC <- c()
-nu_validation_AUC <- c()
+# nu_training_AUC <- c()
+# nu_validation_AUC <- c()
 # nu_test_AUC<-c()
 
 training_ACC <- c()
 validation_ACC <- c()
 # test_ACC<-c()
-nu_training_ACC <- c()
-nu_validation_ACC <- c()
-nu_test_ACC<-c()
+# nu_training_ACC <- c()
+# nu_validation_ACC <- c()
+# nu_test_ACC<-c()
 
 training_recall <- c()
 validation_recall <- c()
 test_recall<-c()
-nu_training_recall <- c()
-nu_validation_recall <- c()
+# nu_training_recall <- c()
+# nu_validation_recall <- c()
 # nu_test_recall<-c()
 
 
 training_p <- c()
 validation_p <- c()
 # test_p<-c()
-nu_training_p <- c()
-nu_validation_p <- c()
+# nu_training_p <- c()
+# nu_validation_p <- c()
 # nu_test_p<-c()
 
 
@@ -81,16 +83,24 @@ for (i in 1:k){
   vali_set<- train_data[which(group_index==i),]
   train_set<-train_data[-(which(group_index==i)),]
   
-  model <- svm(TAIEX..t.~.,
-               data=train_set,
-               probability=TRUE,
-               scale = TRUE,
-               kernel='linear',
-               cost=1,
-               epsilon=0.1,tolerance=0.01
-  )
+  # model <- svm(TAIEX..t.~.,
+  #              data=train_set,
+  #              probability=TRUE,
+  #              scale = TRUE,
+  #              kernel='linear',
+  #              cost=1,
+  #              epsilon=0.1,tolerance=0.01
+  # ) 
+  # #0.55
   
-  
+  # model <- svm(TAIEX..t.~.,
+  #              data=train_set,
+  #              probability=TRUE,
+  #              scale = TRUE,
+  #              kernel='polynomial',
+  #              cost=1,
+  #              epsilon=0.1,tolerance=0.01
+  # )
   
   # AUC
   
@@ -117,26 +127,29 @@ for (i in 1:k){
   
   
   #nu 
-  nu_train_CM <- table(data.frame(truth=train_set$TAIEX..t.,pred=factor(rep(max_class,nrow(train_set)),levels=0:1)))
-  nu_vali_CM <- table(data.frame(truth=vali_set$TAIEX..t.,pred=factor(rep(max_class,nrow(vali_set)),levels=0:1)))
-  
-  # AUC
-  nu_train_auc<-performance(prediction(rep(max_class,nrow(train_set)),train_set$TAIEX..t.),"auc")@y.values[[1]]
-  nu_vali_auc<-performance(prediction(rep(max_class,nrow(vali_set)),vali_set$TAIEX..t.),"auc")@y.values[[1]]
-  nu_training_AUC<-c(nu_training_AUC,nu_train_auc)
-  nu_validation_AUC <- c(nu_validation_AUC,nu_vali_auc)
-  
-  
-  nu_training_ACC<-c(nu_training_ACC,sum(diag(nu_train_CM))/sum(nu_train_CM))
-  nu_validation_ACC <- c(nu_validation_ACC,sum(diag(nu_vali_CM))/sum(nu_vali_CM))
-  
-  nu_training_recall<-c(nu_training_recall,nu_train_CM[2,2]/(nu_train_CM[2,2]+nu_train_CM[2,1]))
-  nu_validation_recall<-c(nu_validation_recall,nu_vali_CM[2,2]/(nu_vali_CM[2,2]+nu_vali_CM[2,1]))                 
-  
-  nu_training_p<-c(nu_training_p,nu_train_CM[2,2]/(nu_train_CM[2,2]+nu_train_CM[1,2]))
-  nu_validation_p<-c(nu_validation_p,nu_vali_CM[2,2]/(nu_vali_CM[2,2]+nu_vali_CM[1,2]))  
+  # nu_train_CM <- table(data.frame(truth=train_set$TAIEX..t.,pred=factor(rep(max_class,nrow(train_set)),levels=0:1)))
+  # nu_vali_CM <- table(data.frame(truth=vali_set$TAIEX..t.,pred=factor(rep(max_class,nrow(vali_set)),levels=0:1)))
+  # 
+  # # AUC
+  # nu_train_auc<-performance(prediction(rep(max_class,nrow(train_set)),train_set$TAIEX..t.),"auc")@y.values[[1]]
+  # nu_vali_auc<-performance(prediction(rep(max_class,nrow(vali_set)),vali_set$TAIEX..t.),"auc")@y.values[[1]]
+  # nu_training_AUC<-c(nu_training_AUC,nu_train_auc)
+  # nu_validation_AUC <- c(nu_validation_AUC,nu_vali_auc)
+  # 
+  # 
+  # nu_training_ACC<-c(nu_training_ACC,sum(diag(nu_train_CM))/sum(nu_train_CM))
+  # nu_validation_ACC <- c(nu_validation_ACC,sum(diag(nu_vali_CM))/sum(nu_vali_CM))
+  # 
+  # nu_training_recall<-c(nu_training_recall,nu_train_CM[2,2]/(nu_train_CM[2,2]+nu_train_CM[2,1]))
+  # nu_validation_recall<-c(nu_validation_recall,nu_vali_CM[2,2]/(nu_vali_CM[2,2]+nu_vali_CM[2,1]))                 
+  # 
+  # nu_training_p<-c(nu_training_p,nu_train_CM[2,2]/(nu_train_CM[2,2]+nu_train_CM[1,2]))
+  # nu_validation_p<-c(nu_validation_p,nu_vali_CM[2,2]/(nu_vali_CM[2,2]+nu_vali_CM[1,2]))  
   
 }
+
+
+
 round_avg<-function(x){
   return(c(round(x,2),round(sum(x)/length(x),2)))
 }
@@ -145,6 +158,7 @@ set<-c(set,"ave.")
 training_AUC<-round_avg(training_AUC)
 # test_AUC<-round_avg(test_AUC)
 validation_AUC<-round_avg(validation_AUC)
+validation_AUC
 
 nu_training_AUC <- round_avg(nu_training_AUC)
 # nu_test_AUC<-round_avg(nu_test_AUC)
@@ -153,6 +167,7 @@ nu_validation_AUC <- round_avg(nu_validation_AUC)
 
 training_ACC <- round_avg(training_ACC)
 validation_ACC <- round_avg(validation_ACC)
+validation_ACC
 # test_ACC<-round_avg(test_ACC)
 nu_training_ACC <- round_avg(nu_training_ACC)
 nu_validation_ACC <- round_avg(nu_validation_ACC)
@@ -198,23 +213,23 @@ out_data<-data.frame(
                       
                       stringsAsFactors = F)
 
-out_data1<-data.frame(ACC=set,
-                      nu_train_ACC =	nu_training_ACC ,
-                      nu_validation_ACC =	nu_validation_ACC ,
-                      
-                      recall =set,
-                      nu_train_recall =	nu_training_recall ,
-                      nu_validation_recall =	nu_validation_recall ,
-                      
-                      percion=set,
-                      nu_training_p =	nu_training_p ,
-                      nu_validation_p =	nu_validation_p ,
-                      
-                      AUC=set,
-                      nu_train_AUC =	nu_training_AUC,
-                      nu_validation_AUC =	nu_validation_AUC,
-                      
-                      stringsAsFactors = F)
+# out_data1<-data.frame(ACC=set,
+#                       nu_train_ACC =	nu_training_ACC ,
+#                       nu_validation_ACC =	nu_validation_ACC ,
+#                       
+#                       recall =set,
+#                       nu_train_recall =	nu_training_recall ,
+#                       nu_validation_recall =	nu_validation_recall ,
+#                       
+#                       percion=set,
+#                       nu_training_p =	nu_training_p ,
+#                       nu_validation_p =	nu_validation_p ,
+#                       
+#                       AUC=set,
+#                       nu_train_AUC =	nu_training_AUC,
+#                       nu_validation_AUC =	nu_validation_AUC,
+#                       
+#                       stringsAsFactors = F)
 
 write.table(out_data,file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
 
@@ -232,13 +247,13 @@ model <- svm(TAIEX..t.~.,
 
 
 # CM
-train_CM <- table(data.frame(truth=train_data$TAIEX..t.,pred=factor(ifelse(predict(model, type="class")>threshold,1,0),levels=0:1)))
-test_CM <- table(data.frame(truth=test_set$TAIEX..t.,pred=factor(ifelse(predict(model, newdata=test_set, type="class")>threshold,1,0),levels=0:1)))
-# write.table(as.data.frame.matrix(train_CM),file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
-# write.table(as.data.frame.matrix(train_CM),file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
-
-write.table(data.frame(as.data.frame.matrix(train_CM),data=cbind("train")),file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
-write.table(data.frame(as.data.frame.matrix(test_CM),data=cbind("test")),file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
+# train_CM <- table(data.frame(truth=train_data$TAIEX..t.,pred=factor(ifelse(predict(model, type="class")>threshold,1,0),levels=0:1)))
+# test_CM <- table(data.frame(truth=test_set$TAIEX..t.,pred=factor(ifelse(predict(model, newdata=test_set, type="class")>threshold,1,0),levels=0:1)))
+# # write.table(as.data.frame.matrix(train_CM),file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
+# # write.table(as.data.frame.matrix(train_CM),file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
+# 
+# write.table(data.frame(as.data.frame.matrix(train_CM),data=cbind("train")),file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
+# write.table(data.frame(as.data.frame.matrix(test_CM),data=cbind("test")),file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
 
 train_auc<-performance(prediction(predict(model, probability=TRUE),train_data$TAIEX..t.),"auc")@y.values[[1]]
 test_pred<-predict(model, newdata=test_set, probability=TRUE)
