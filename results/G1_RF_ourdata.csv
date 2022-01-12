@@ -1,0 +1,14 @@
+AUC,Training,Validation,Testing,Accuracy,Training.1,Validation.1,Testing.1,Precision,Training.2,Validation.2,Testing.2,Recall,Training.3,Validation.3,Testing.3
+fold1,1,0.86,0.88,fold1,0.98,0.79,0.78,fold1,0.98,0.79,0.77,fold1,0.98,0.87,0.85
+fold2,1,0.87,0.88,fold2,0.99,0.81,0.79,fold2,0.99,0.81,0.81,fold2,0.99,0.85,0.84
+fold3,1,0.9,0.86,fold3,0.98,0.82,0.79,fold3,0.97,0.8,0.78,fold3,0.99,0.88,0.85
+fold4,1,0.89,0.88,fold4,0.99,0.8,0.82,fold4,0.99,0.81,0.78,fold4,0.99,0.84,0.9
+fold5,1,0.92,0.86,fold5,0.98,0.85,0.79,fold5,0.98,0.84,0.79,fold5,0.99,0.9,0.84
+ave.,1,0.89,0.87,ave.,0.98,0.82,0.79,ave.,0.98,0.81,0.79,ave.,0.99,0.87,0.85
+AUC,null_Training,null_Validation,null_Testing,Accuracy,null_Training.1,null_Validation.1,null_Testing.1,Precision,null_Training.2,null_Validation.2,null_Testing.2,Recall,null_Training.3,null_Validation.3,null_Testing.3
+fold1,0.5,0.5,0.5,fold1,0.55,0.58,0.54,fold1,0.55,0.58,0.54,fold1,1,1,1
+fold2,0.5,0.5,0.5,fold2,0.55,0.54,0.58,fold2,0.55,0.54,0.58,fold2,1,1,1
+fold3,0.5,0.5,0.5,fold3,0.54,0.52,0.54,fold3,0.54,0.52,0.54,fold3,1,1,1
+fold4,0.5,0.5,0.5,fold4,0.54,0.55,0.52,fold4,0.54,0.55,0.52,fold4,1,1,1
+fold5,0.5,0.5,0.5,fold5,0.55,0.54,0.55,fold5,0.55,0.54,0.55,fold5,1,1,1
+ave.,0.5,0.5,0.5,ave.,0.55,0.55,0.55,ave.,0.55,0.55,0.55,ave.,1,1,1
