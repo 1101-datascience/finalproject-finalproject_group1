@@ -1,3 +1,4 @@
+
 library(shiny)
 library(ggbiplot)
 library(ca)
@@ -67,21 +68,42 @@ ui <- fluidPage(
              tabPanel(p("Result", style = "color:#6A3E3E;font-size: 25px;font-family: Century Gothic, sans-serif;font-weight: bold"),
                       tags$style(type='text/css', '#pcaResult,#pcaSummary,#caData{background-color: white; color: #756767;font-family: Consolas;font-weight: bold;font-size: 12px}'),
                       #titlePanel(h1("Stock Prediction Evaluation")),
+                      sidebarPanel(
+                        selectInput("selectdata","Select Data Set:",c("Raw Data" = 1,"Only Diff" = 2),selected = 1)
+                      ),
                       mainPanel(
                         tabsetPanel(
-                          tabPanel(h2("PCA"),
+                          tabPanel(h2("Naive Bayes"),
                                    #plotOutput("pcaPlot", width = "100%")
                           ),
-                          tabPanel(h2("PCA Result"),
-                                  # verbatimTextOutput("pcaResult")
+                          tabPanel(h2("SVM"),
+                                   # verbatimTextOutput("pcaResult")
                           ),
-                          tabPanel(h2("PCA Summary"),
-                                  # verbatimTextOutput("pcaSummary"))
+                          tabPanel(h2("Decision Tree"),
+                                   # verbatimTextOutput("pcaResult")
+                          ),
+                          tabPanel(h2("Logistic Regression"),
+                                   # verbatimTextOutput("pcaResult")
+                          ),
+                          tabPanel(h2("Random Forest"),
+                                   # verbatimTextOutput("pcaResult")
+                          ),
+                          tabPanel(h2("LSTM"),
+                                   # verbatimTextOutput("pcaResult")
+                          ),
+                          tabPanel(h2("CNN"),
+                                   # verbatimTextOutput("pcaResult")
+                          ),
+                          tabPanel(h2("TCN"),
+                                   # verbatimTextOutput("pcaSummary"))
+                          ),
+                          tabPanel(h2("Overview"),
+                                   # verbatimTextOutput("pcaSummary"))
+                          )
+                          
                         )
-                        
                       )
-             )
-             #tabPanel(p("CA", style = "color:#6A3E3E;font-size: 25px;font-family: Century Gothic, sans-serif;font-weight: bold"),
+                      #tabPanel(p("CA", style = "color:#6A3E3E;font-size: 25px;font-family: Century Gothic, sans-serif;font-weight: bold"),
                       #titlePanel(h1("Correspondence Analysis")),
                       # sidebarPanel(
                       #   sliderInput("rangeCA", "Range of Input Data:",min = 1, max = 150,value = c(1,150)),
@@ -117,11 +139,11 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
- # data(iris)
+  # data(iris)
   data <- read.csv("../data/ourdata.csv", header = T)
   data<-data.frame(data)
-
- 
+  
+  
   
   output$cor<-renderPlot({
     names(data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
