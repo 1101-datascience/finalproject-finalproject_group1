@@ -1,29 +1,29 @@
-Model.Evaluation.value
-LogisiticRegression	Accuary	0.55
-SVM	Accuary	0.55
-RandomForest	Accuary	0.98
-Decision Tree	Accuary	0.62
-NaiveBayes	Accuary	0.52
-QDA	Accuary	0.61
-Null model	Accuary	0.53
-LogisiticRegression	Precision	0.52
-SVM	Precision	0.55
-RandomForest	Precision	0.81
-Decision Tree	Precision	0.64
-NaiveBayes	Precision	0.54
-QDA	Precision	0.83
-Null model	Precision	0.57
-LogisiticRegression	Recall	0.24
-SVM	Recall	1
-RandomForest	Recall	0.87
-Decision Tree	Recall	0.74
-NaiveBayes	Recall	0.85
-QDA	Recall	0.6
-Null model	Recall	0.52
-LogisiticRegression	AUC	0.52
-SVM	AUC	0.5
-RandomForest	AUC	0.89
-Decision Tree	AUC	0.65
-NaiveBayes	AUC	0.52
-QDA	AUC	0
-Null model	AUC	0
+Model,Evaluation,value
+LogisiticRegression,Accuary,0.55
+SVM,Accuary,0.55
+RandomForest,Accuary,0.98
+DecisionTree,Accuary,0.62
+NaiveBayes,Accuary,0.52
+QDA,Accuary,0.61
+Nullmodel,Accuary,0.53
+LogisiticRegression,Precision,0.52
+SVM,Precision,0.55
+RandomForest,Precision,0.81
+DecisionTree,Precision,0.64
+NaiveBayes,Precision,0.54
+QDA,Precision,0.83
+Nullmodel,Precision,0.57
+LogisiticRegression,Recall,0.24
+SVM,Recall,1
+RandomForest,Recall,0.87
+DecisionTree,Recall,0.74
+NaiveBayes,Recall,0.85
+QDA,Recall,0.6
+Nullmodel,Recall,0.52
+LogisiticRegression,AUC,0.52
+SVM,AUC,0.5
+RandomForest,AUC,0.89
+DecisionTree,AUC,0.65
+NaiveBayes,AUC,0.52
+QDA,AUC,0.55
+Nullmodel,AUC,0.5

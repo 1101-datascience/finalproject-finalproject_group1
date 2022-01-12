@@ -6,7 +6,7 @@ library(DT)
 library("FactoMineR")
 library("corrplot")
 library("factoextra")
-
+library(reactable)
 data <- read.csv("../data/ourdata.csv", header = T)
 data<-data.frame(data)
 
@@ -18,6 +18,59 @@ add_features_data<-data.frame(add_features_data)
 
 overview_cros_train <- read.csv("../results/overview_cros_train.csv", header = T)
 overview_cros_valid <- read.csv("../results/overview_cros_vaild.csv", header = T)
+overview_final_train <- read.csv("../results/overview_final_train.csv", header = T)
+overview_final_test <- read.csv("../results/overview_final_test.csv", header = T)
+
+cros_overview <- read.csv("../results/cros_overview.csv", header = T)
+final_overview <- read.csv("../results/final_overview.csv", header = T)
+rownames(cros_overview) <- as.matrix(cros_overview[1])
+rownames(final_overview ) <- as.matrix(final_overview [1])
+cros_overview <- cros_overview[-1]
+final_overview <- final_overview[-1]
+
+lr.crosview <- cros_overview[-2:-7,]
+svm.crosview <- cros_overview[-1,]
+svm.crosview <- svm.crosview[-2:-6,]
+rf.crosview <- cros_overview[-1:-2,]
+rf.crosview <- rf.crosview[-2:-5,]
+dt.crosview <- cros_overview[-1:-3,]
+dt.crosview <- dt.crosview[-2:-4,]
+nb.crosview <- cros_overview[-1:-4,]
+nb.crosview <- nb.crosview[-2:-3,]
+qda.crosview <- cros_overview[-1:-5,]
+qda.crosview <- qda.crosview[-2,]
+null.crosview <- cros_overview[-1:-6,]
+
+rownames(lr.crosview) <- "Evaluation"
+rownames(svm.crosview) <- "Evaluation"
+rownames(rf.crosview) <- "Evaluation"
+rownames(dt.crosview) <- "Evaluation"
+rownames(nb.crosview) <- "Evaluation"
+rownames(qda.crosview) <- "Evaluation"
+rownames(null.crosview) <- "Evaluation"
+
+lr.finalview <- final_overview[-2:-7,]
+svm.finalview <- final_overview[-1,]
+svm.finalview <- svm.finalview[-2:-6,]
+rf.finalview <- final_overview[-1:-2,]
+rf.finalview <- rf.finalview[-2:-5,]
+dt.finalview <- final_overview[-1:-3,]
+dt.finalview <- dt.finalview[-2:-4,]
+nb.finalview <- final_overview[-1:-4,]
+nb.finalview <- nb.finalview[-2:-3,]
+qda.finalview <- final_overview[-1:-5,]
+qda.finalview <- qda.finalview[-2,]
+null.finalview <- final_overview[-1:-6,]
+
+rownames(lr.finalview) <- "Evaluation"
+rownames(svm.finalview) <- "Evaluation"
+rownames(rf.finalview) <- "Evaluation"
+rownames(dt.finalview) <- "Evaluation"
+rownames(nb.finalview) <- "Evaluation"
+rownames(qda.finalview) <- "Evaluation"
+rownames(null.finalview) <- "Evaluation"
+
+
 
 ui <- fluidPage(
   title = "Data Science Final Project - Group 1",
@@ -73,30 +126,63 @@ ui <- fluidPage(
                         tabsetPanel(
                           tabPanel(h2("RAW Data"),
                                    #plotOutput("pcaPlot", width = "100%")
+                                   br(),
                                    datatable(data),
-                                   h3("Data Correlations"),
+                                   br(),
+                                   br(),
+                                   div("Data Correlations", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    plotOutput('cor'),
+                                   br(),
+                                   br(),
+                                   div("Data Boxplot", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    plotOutput('boxplot_data'),
+                                   br(),
+                                   br(),
+                                   div("Summary", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    verbatimTextOutput('summary_data')
                           ),
                           tabPanel(h2("Only Diff"),
+                                   br(),
                                    datatable(diff_data),
-                                   hr(),
-                                   h3("Data Correlations"),
-                                   hr(),
+                                   br(),
+                                   br(),
+                                   div("Data Correlations", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    plotOutput('cor_diff'), 
-                                   hr(),
+                                   br(),
+                                   br(),
+                                   div("Data Boxplot", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    plotOutput('boxplot_diff'),
-                                   hr(),
+                                   br(),
+                                   br(),
+                                   div("Summary", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    verbatimTextOutput('summary_diff')
                                    # verbatimTextOutput("pcaResult")
                           ),
                           tabPanel(h2("Data add Feature"),
+                                   br(),
                                    datatable(add_features_data),
+                                   br(),
+                                   br(),
+                                   div("Data Correlations", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    plotOutput('cor_add'),
+                                   br(),
+                                   br(),
+                                   div("Data Boxplot", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    plotOutput('boxplot_add'),
+                                   br(),
+                                   br(),
+                                   div("Summary", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    verbatimTextOutput('summary_add')
-                                   # verbatimTextOutput("pcaSummary"))
+  
                           )
                           
                         )
@@ -111,88 +197,144 @@ ui <- fluidPage(
                       mainPanel(
                         tabsetPanel(
                           tabPanel(h2("Overview"),
-                                   plotOutput("barplotOverview", width = "100%")
+                                   br(),
+                                   div("5-fold Cross validation for train data", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   plotOutput("cros_train", width = "100%"),
+                                   br(),
+                                   div("5-fold Cross validation for valid data", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   plotOutput("cros_valid", width = "100%"),
+                                   br(),
+                                   br(),
+                                   br(),
+                                   div("Final Prediction for train data", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   plotOutput("final_train", width = "100%"),
+                                   br(),
+                                   div("Final Prediction for test data", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   plotOutput("final_test", width = "100%")
                           ),
                           tabPanel(h2("Naive Bayes"),
+  
+                                   br(),
+                                   div("Average Cross validation", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   reactableOutput("nb_crview"),
+                                   br(),
+                                   div("Final Prediction", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   reactableOutput("nb_fiview"),
+                                   br(),
+                                   div("ROC Curve", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
                                    htmlOutput("AUC_nb")
-                                   #plotOutput("pcaPlot", width = "100%")
+                                   
                           ),
                           tabPanel(h2("SVM"),
+                                   br(),
+                                   div("Average Cross validation", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   reactableOutput("svm_crview"),
+                                   br(),
+                                   div("Final Prediction", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   reactableOutput("svm_fiview"),
+                                   br(),
+                                   div("ROC Curve", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
                                    htmlOutput("AUC_svm")
-                                   # verbatimTextOutput("pcaResult")
+                                   
                           ),
                           tabPanel(h2("Decision Tree"),
+                                   br(),
+                                   div("Average Cross validation", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   reactableOutput("dt_crview"),
+                                   br(),
+                                   div("Final Prediction", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   reactableOutput("dt_fiview"),
+                                   br(),
+                                   div("ROC Curve", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
                                    htmlOutput("AUC_dt")
-                                   # verbatimTextOutput("pcaResult")
+                                   
                           ),
                           tabPanel(h2("Logistic Regression"),
+                                   br(),
+                                   div("Average Cross validation", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   reactableOutput("lr_crview"),
+                                   br(),
+                                   div("Final Prediction", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   reactableOutput("lr_fiview"),
+                                   br(),
+                                   div("ROC Curve", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
                                    htmlOutput("AUC_lr")
-                                   # verbatimTextOutput("pcaResult")
+
                           ),
                           tabPanel(h2("Random Forest"),
-                                   htmlOutput("AUC_Rf")
-                                   # verbatimTextOutput("pcaResult")
+                                   br(),
+                                   div("Average Cross validation", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   reactableOutput("rf_crview"),
+                                   br(),
+                                   div("Final Prediction", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   reactableOutput("rf_fiview"),
+                                   br(),
+                                   div("ROC Curve", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:100%"),
+                                   htmlOutput("AUC_Rf"),
                           ),
                           tabPanel(h2("LSTM"),
+                                   br(),
+                                   div("Result", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    htmlOutput("tloss_lstm"),
+                                   br(),
+                                   div("Loss", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    htmlOutput("floss_lstm"),
-                                   # verbatimTextOutput("pcaResult")
+  
                           ),
                           tabPanel(h2("CNN"),
+                                   br(),
+                                   div("Result", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    htmlOutput("tloss_cnn"),
+                                   br(),
+                                   div("Loss", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    htmlOutput("floss_cnn"),
-                                   # verbatimTextOutput("pcaResult")
+
                           ),
                           tabPanel(h2("TCN"),
+                                   br(),
+                                   div("Result", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    htmlOutput("tloss_tcn"),
+                                   br(),
+                                   div("Loss", style = "text-align: center; 
+                  background-color: #31A0D9; color:#FDEFC7; font-size:140%"),
                                    htmlOutput("floss_tcn"),
-                                   # verbatimTextOutput("pcaSummary"))
+    
                           )
                           
                           
                         )
                       )
-                      #tabPanel(p("CA", style = "color:#6A3E3E;font-size: 25px;font-family: Century Gothic, sans-serif;font-weight: bold"),
-                      #titlePanel(h1("Correspondence Analysis")),
-                      # sidebarPanel(
-                      #   sliderInput("rangeCA", "Range of Input Data:",min = 1, max = 150,value = c(1,150)),
-                      #   selectInput("Dstart","Choose Start Dimension of Contribution :",c("Dim 1" = 1,
-                      #                                                                     "Dim 2" = 2,
-                      #                                                                     "Dim 3" = 3),selected = 1),
-                      #   selectInput("Dend","Choose Last Dimension of Contribution :",c("Dim 1" = 1,
-                      #                                                                  "Dim 2" = 2,
-                      #                                                                  "Dim 3" = 3),selected = 1)
-                      # ),
-                      # mainPanel(
-                      #   tabsetPanel(
-                      #     tabPanel(h2("CA Biplot"),
-                      #              plotOutput("caPlot")
-                      #     ),
-                      #     tabPanel(h2("CA Summary"),
-                      #              verbatimTextOutput("caData")
-                      #     ),
-                      #     tabPanel(h2("CA Row Contribution Plot"),
-                      #              plotOutput("caRowContribPlot")
-                      #     ),
-                      #     tabPanel(h2("CA Column Contribution Plot"),
-                      #              plotOutput("caColContribPlot")
-                      #     ),
-                      #     tabPanel(h2("CA Sree Plot"),
-                      #              plotOutput("caScreeplot")
-                      #     )
-                      #   )
-                      # )
              )
              
   )
 )
 
 server <- function(input, output) {
-  # data(iris)
-  #data <- read.csv("../data/ourdata.csv", header = T)
- # data<-data.frame(data)
-  
-  
+
   
   output$cor<-renderPlot({
     names(data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
@@ -202,6 +344,7 @@ server <- function(input, output) {
              ,method='color',type='full'
              ,bg='black'
              ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
+  
   output$cor_diff<-renderPlot({
     names(diff_data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
     diff_data1 <- diff_data[-6]
@@ -210,6 +353,7 @@ server <- function(input, output) {
              ,method='color',type='full'
              ,bg='black'
              ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
+  
   output$cor_add<-renderPlot({
     
     names(add_features_data)<-c(
@@ -253,11 +397,73 @@ server <- function(input, output) {
   output$summary_diff<-renderPrint({ summary(diff_data)})
   output$summary_add<-renderPrint({ summary(add_features_data)})
   
-  output$barplotOverview <- renderPlot({
+  output$cros_train <- renderPlot({
     ggplot(overview_cros_train, aes(fill=Evaluation, y=value, x=Model)) + geom_bar(position="dodge", stat="identity",colour="black")+ scale_fill_hue(c = 40) 
+    
+    
+  })
+  output$cros_valid <- renderPlot({
+    ggplot(overview_cros_valid, aes(fill=Evaluation, y=value, x=Model)) + geom_bar(position="dodge", stat="identity",colour="black")+ scale_fill_hue(c = 40) 
     
   })
   
+  output$final_train <- renderPlot({
+    ggplot(overview_final_train, aes(fill=Evaluation, y=value, x=Model)) + geom_bar(position="dodge", stat="identity",colour="black")+ scale_fill_hue(c = 40) 
+    
+    
+  })
+  output$final_test <- renderPlot({
+    ggplot(overview_final_test, aes(fill=Evaluation, y=value, x=Model)) + geom_bar(position="dodge", stat="identity",colour="black")+ scale_fill_hue(c = 40) 
+    
+    
+  })
+  output$lr_crview <- renderReactable({
+    reactable(lr.crosview)
+  })
+  output$lr_fiview <- renderReactable({
+    reactable(lr.finalview)
+  })
+  
+  output$svm_crview <- renderReactable({
+    reactable(svm.crosview)
+  })
+  output$svm_fiview <- renderReactable({
+    reactable(svm.finalview)
+  })
+  
+  output$rf_crview <- renderReactable({
+    reactable(rf.crosview)
+  })
+  output$rf_fiview <- renderReactable({
+    reactable(rf.finalview)
+  })
+  
+  output$dt_crview <- renderReactable({
+    reactable(dt.crosview)
+  })
+  output$dt_fiview <- renderReactable({
+    reactable(dt.finalview)
+  })
+  
+  output$nb_crview <- renderReactable({
+    reactable(nb.crosview)
+  })
+  output$nb_fiview <- renderReactable({
+    reactable(nb.finalview)
+  })
+  output$qda_crview <- renderReactable({
+    reactable(qda.crosview)
+  })
+  output$qda_fiview <- renderReactable({
+    reactable(qda.finalview)
+  })
+  
+  output$null_crview <- renderReactable({
+    reactable(null.crosview)
+  })
+  output$null_fiview <- renderReactable({
+    reactable(null.finalview)
+  })
   
    output$AUC_nb <-
     renderText({
@@ -333,49 +539,6 @@ server <- function(input, output) {
         "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/G1_TCN_Final_Epoch_Loss.png?raw=true",
         '">')
     })
-  # log.ir <- log(iris[, 1:4])
-  # ir.species <- iris[, 5]
-  # ir.pca <- prcomp(log.ir,center = TRUE, scale. = TRUE)
-  # ir.ca = ca(iris[, 1:4])
-  # log.ir <- reactive(log(iris[input$rangePCA[1]:input$rangePCA[2], 1:4]))
-  # ir.species <- reactive(iris[input$rangePCA[1]:input$rangePCA[2],5])
-  # ir.pca <- reactive(prcomp(log.ir(),center = TRUE, scale. = TRUE))
-  # ir.ca  <- reactive(CA(iris[input$rangeCA[1]:input$rangeCA[2], 1:4], graph = FALSE))
-  # 
-  # output$pcaData <- renderPrint(
-  #   iris
-  # )
-  # output$pcaResult <- renderPrint({
-  #   ir.pca()
-  # })
-  # output$pcaSummary <- renderPrint(
-  #   summary(ir.pca())
-  # )
-  # output$pcaPlot <- renderPlot({
-  #   g <- ggbiplot(ir.pca(), choices = c(as.numeric(input$x),as.numeric(input$y)),obs.scale = 1, var.scale = 1, groups = ir.species()) 
-  #   g <- g + scale_color_discrete(name = '') 
-  #   g <- g + theme(legend.direction = 'horizontal', legend.position = 'top')
-  #   print(g)
-  # })
-  # output$caData <- renderPrint(
-  #   summary(ir.ca())
-  # )
-  # output$caPlot <- renderPlot(
-  #   fviz_ca_biplot(ir.ca(),title = "")
-  # )
-  # output$caScreeplot <- renderPlot(
-  #   fviz_screeplot(ir.ca(), addlabels = TRUE,barfill = "#9A8E8E", barcolor = "black",title = "") +geom_hline(yintercept=33.33, linetype=2, color="red")
-  # )
-  # output$caRowContribPlot <- renderPlot(
-  #   fviz_contrib(ir.ca(), choice = "row", axes = input$Dstart:input$Dend,fill = "#9A8E8E",color = "black")
-  # )
-  # output$caColContribPlot <- renderPlot(
-  #   fviz_contrib(ir.ca(), choice = "col", axes = input$Dstart:input$Dend,fill = "#9A8E8E",color = "black")
-  # )
-  
-  
-  
-  
 }
 
 # Create Shiny app ----

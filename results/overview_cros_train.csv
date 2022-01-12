@@ -25,5 +25,5 @@ SVM,AUC,1
 RandomForest,AUC,1
 Decision Tree,AUC,0.69
 NaiveBayes,AUC,0.52
-QDA,AUC,0.565
+QDA,AUC,0.57
 Null model,AUC,0.5
