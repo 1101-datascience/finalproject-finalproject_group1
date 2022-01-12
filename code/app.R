@@ -73,9 +73,13 @@ ui <- fluidPage(
                           ),
                           tabPanel(h2("Only Diff"),
                                    datatable(diff_data),
+                                   hr(),
                                    h3("Data Correlations"),
+                                   hr(),
                                    plotOutput('cor_diff'), 
+                                   hr(),
                                    plotOutput('boxplot_diff'),
+                                   hr(),
                                    verbatimTextOutput('summary_diff')
                                    # verbatimTextOutput("pcaResult")
                           ),
@@ -99,7 +103,7 @@ ui <- fluidPage(
                       mainPanel(
                         tabsetPanel(
                           tabPanel(h2("Overview"),
-                                   # verbatimTextOutput("pcaSummary"))
+                                   plotOutput("barplotOverview", width = "100%")
                           ),
                           tabPanel(h2("Naive Bayes"),
                                    htmlOutput("AUC_nb")
@@ -240,7 +244,14 @@ server <- function(input, output) {
   output$summary_data<-renderPrint({ summary(data)})
   output$summary_diff<-renderPrint({ summary(diff_data)})
   output$summary_add<-renderPrint({ summary(add_features_data)})
-  output$AUC_nb <-
+  
+  output$barplotOverview <- renderPlot({
+    ggplot(overview_cros_train, aes(fill=Evaluation, y=value, x=Model)) + geom_bar(position="dodge", stat="identity",colour="black")+ scale_fill_hue(c = 40) 
+    
+  })
+  
+  
+   output$AUC_nb <-
     renderText({
       c('<img src="',
         "https://github.com/evaneversaydie/rep/blob/master/nccu_ds_image/NaiveBayes_AUC.png?raw=true",
@@ -318,41 +329,41 @@ server <- function(input, output) {
   # ir.species <- iris[, 5]
   # ir.pca <- prcomp(log.ir,center = TRUE, scale. = TRUE)
   # ir.ca = ca(iris[, 1:4])
-  log.ir <- reactive(log(iris[input$rangePCA[1]:input$rangePCA[2], 1:4]))
-  ir.species <- reactive(iris[input$rangePCA[1]:input$rangePCA[2],5])
-  ir.pca <- reactive(prcomp(log.ir(),center = TRUE, scale. = TRUE))
-  ir.ca  <- reactive(CA(iris[input$rangeCA[1]:input$rangeCA[2], 1:4], graph = FALSE))
-  
-  output$pcaData <- renderPrint(
-    iris
-  )
-  output$pcaResult <- renderPrint({
-    ir.pca()
-  })
-  output$pcaSummary <- renderPrint(
-    summary(ir.pca())
-  )
-  output$pcaPlot <- renderPlot({
-    g <- ggbiplot(ir.pca(), choices = c(as.numeric(input$x),as.numeric(input$y)),obs.scale = 1, var.scale = 1, groups = ir.species()) 
-    g <- g + scale_color_discrete(name = '') 
-    g <- g + theme(legend.direction = 'horizontal', legend.position = 'top')
-    print(g)
-  })
-  output$caData <- renderPrint(
-    summary(ir.ca())
-  )
-  output$caPlot <- renderPlot(
-    fviz_ca_biplot(ir.ca(),title = "")
-  )
-  output$caScreeplot <- renderPlot(
-    fviz_screeplot(ir.ca(), addlabels = TRUE,barfill = "#9A8E8E", barcolor = "black",title = "") +geom_hline(yintercept=33.33, linetype=2, color="red")
-  )
-  output$caRowContribPlot <- renderPlot(
-    fviz_contrib(ir.ca(), choice = "row", axes = input$Dstart:input$Dend,fill = "#9A8E8E",color = "black")
-  )
-  output$caColContribPlot <- renderPlot(
-    fviz_contrib(ir.ca(), choice = "col", axes = input$Dstart:input$Dend,fill = "#9A8E8E",color = "black")
-  )
+  # log.ir <- reactive(log(iris[input$rangePCA[1]:input$rangePCA[2], 1:4]))
+  # ir.species <- reactive(iris[input$rangePCA[1]:input$rangePCA[2],5])
+  # ir.pca <- reactive(prcomp(log.ir(),center = TRUE, scale. = TRUE))
+  # ir.ca  <- reactive(CA(iris[input$rangeCA[1]:input$rangeCA[2], 1:4], graph = FALSE))
+  # 
+  # output$pcaData <- renderPrint(
+  #   iris
+  # )
+  # output$pcaResult <- renderPrint({
+  #   ir.pca()
+  # })
+  # output$pcaSummary <- renderPrint(
+  #   summary(ir.pca())
+  # )
+  # output$pcaPlot <- renderPlot({
+  #   g <- ggbiplot(ir.pca(), choices = c(as.numeric(input$x),as.numeric(input$y)),obs.scale = 1, var.scale = 1, groups = ir.species()) 
+  #   g <- g + scale_color_discrete(name = '') 
+  #   g <- g + theme(legend.direction = 'horizontal', legend.position = 'top')
+  #   print(g)
+  # })
+  # output$caData <- renderPrint(
+  #   summary(ir.ca())
+  # )
+  # output$caPlot <- renderPlot(
+  #   fviz_ca_biplot(ir.ca(),title = "")
+  # )
+  # output$caScreeplot <- renderPlot(
+  #   fviz_screeplot(ir.ca(), addlabels = TRUE,barfill = "#9A8E8E", barcolor = "black",title = "") +geom_hline(yintercept=33.33, linetype=2, color="red")
+  # )
+  # output$caRowContribPlot <- renderPlot(
+  #   fviz_contrib(ir.ca(), choice = "row", axes = input$Dstart:input$Dend,fill = "#9A8E8E",color = "black")
+  # )
+  # output$caColContribPlot <- renderPlot(
+  #   fviz_contrib(ir.ca(), choice = "col", axes = input$Dstart:input$Dend,fill = "#9A8E8E",color = "black")
+  # )
   
   
   
