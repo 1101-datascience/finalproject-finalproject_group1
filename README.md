@@ -1,5 +1,3 @@
-[TOC]
-
 # Group1. 以股為鏡--台股上漲預測
 
 ### Menbers
@@ -26,7 +24,7 @@ Running this script will output 1 csv file(G1_Decision_tree.csv) and 1 pdf file(
 
 
 #### <span style="color:#ff595e">**on-line visualization**</span>
-Shiny
+Shiny:https://yungrujeng.shinyapps.io/finalproject-finalproject_group1
 
 ## Folder organization and its related information
 
