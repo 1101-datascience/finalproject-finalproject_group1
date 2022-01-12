@@ -48,7 +48,7 @@ ui <- fluidPage(
   navbarPage(p("Stock Prediction", style = "color:#6A3E3E;font-size: 25px;font-family: Century Gothic, sans-serif;font-weight: bold"),
              tabPanel(p("Dataset", style = "color:#6A3E3E;font-size: 25px;font-family: Century Gothic, sans-serif;font-weight: bold"),
                       #titlePanel(h1("Data: Iris dataset")),
-                      mainPanel(datatable(data)),
+                    #  mainPanel(datatable(data)),
                       mainPanel(
                         tabsetPanel(
                           tabPanel(h2("RAW data"),
@@ -68,11 +68,14 @@ ui <- fluidPage(
              tabPanel(p("Result", style = "color:#6A3E3E;font-size: 25px;font-family: Century Gothic, sans-serif;font-weight: bold"),
                       tags$style(type='text/css', '#pcaResult,#pcaSummary,#caData{background-color: white; color: #756767;font-family: Consolas;font-weight: bold;font-size: 12px}'),
                       #titlePanel(h1("Stock Prediction Evaluation")),
-                      sidebarPanel(
-                        selectInput("selectdata","Select Data Set:",c("Raw Data" = 1,"Only Diff" = 2),selected = 1)
-                      ),
+                      # sidebarPanel(
+                      #   selectInput("selectdata","Select Data Set:",c("Raw Data" = 1,"Only Diff" = 2),selected = 1)
+                      # ),
                       mainPanel(
                         tabsetPanel(
+                          tabPanel(h2("Overview"),
+                                   # verbatimTextOutput("pcaSummary"))
+                          ),
                           tabPanel(h2("Naive Bayes"),
                                    #plotOutput("pcaPlot", width = "100%")
                           ),
@@ -96,10 +99,8 @@ ui <- fluidPage(
                           ),
                           tabPanel(h2("TCN"),
                                    # verbatimTextOutput("pcaSummary"))
-                          ),
-                          tabPanel(h2("Overview"),
-                                   # verbatimTextOutput("pcaSummary"))
                           )
+                          
                           
                         )
                       )
@@ -140,8 +141,8 @@ ui <- fluidPage(
 
 server <- function(input, output) {
   # data(iris)
-  data <- read.csv("../data/ourdata.csv", header = T)
-  data<-data.frame(data)
+  #data <- read.csv("../data/ourdata.csv", header = T)
+ # data<-data.frame(data)
   
   
   

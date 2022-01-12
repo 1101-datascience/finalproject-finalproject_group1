@@ -9,7 +9,7 @@ library(pROC)
 
 args <- commandArgs(trailingOnly = TRUE)
 
-#抓fold, train, test, report, predict的index
+#??old, train, test, report, predict??ndex
 input_index <- -1
 output_index <- -1
 
@@ -20,17 +20,17 @@ for (i in 1:length(args)) {
     output_index <- i
 }
 
-#確定有fold, train, test, report, predict
+#蝣箏??old, train, test, report, predict
 if( (input_index == -1) || (output_index == -1) )
   stop("Missing --input or  --ouput", call.=FALSE)
 
 
-#給變數及檔案路徑
+#蝯西?????楝敺?
 input_path <- args[input_index+1]
 output_path <- args[output_index+1]
 
 print(input_path)
-#確定有無train file
+#蝣箏??train file
 if(!file.exists(input_path)) {
   stop("No such train file", call.=FALSE)
 }
@@ -55,12 +55,12 @@ df[,2] <- df[,2]-min(df[,2])/(max(df[,2])-min(df[,2]))
 df[,3] <- df[,3]-min(df[,3])/(max(df[,3])-min(df[,3]))
 df[,5] <- df[,5]-min(df[,5])/(max(df[,5])-min(df[,5]))
 
-# 標準化
+# 璅???
 df[,4] <- (df[,4] - mean(df[,4])) / sd(df[,4])
 df[,6] <- (df[,6] - mean(df[,6])) / sd(df[,6])
 
 
-#後100
+#敺?100
 testing_set <- df[(nrow(df)-99):nrow(df),]
 
 
@@ -105,7 +105,7 @@ test_null_precision_list  <- c()
 
 for(i in 1:k){
   if(i == 1) {
-    # 用機率切資料
+    # ?璈?????
     Validation_set <- subset(df, df$V1 <= (i/k))
     train_set <- subset(df, df$V1 > (i/k) )
   }
@@ -185,19 +185,41 @@ for(i in 1:k){
 }
 
 
+all_nb_model <- naiveBayes(as.factor(df[,7]) ~., data=df[,1:6])
+model_Pred <- predict(nb_model, testing_set[,1:6])
+test_Matrix <- table(testing_set$TAIEX, model_Pred)
+
+# All_Test_accuracy
+all_single_test_accuracy = ((test_Matrix[1,1]+test_Matrix[2,2])/dim(testing_set)[1])
+all_single_test_accuracy <- round(all_single_test_accuracy,2)
+
+# ALL_Test_recall
+all_single_testing_recall <- (test_Matrix[2,2]/(test_Matrix[2,1]+test_Matrix[2,2]))
+all_single_testing_recall <- round(all_single_testing_recall,2)
+
+# ALL_Test_precision
+all_single_testing_precision <- (test_Matrix[2,2]/(test_Matrix[1,2]+test_Matrix[2,2]))
+all_single_testing_precision <- round(all_single_testing_precision,2)
+
+print(all_single_test_accuracy)
+print(all_single_testing_recall)
+print(all_single_testing_precision)
+
 #Naive Bayes Model
-output_train_accuracy_list <- c(train_accurcy_list, round(mean(train_accurcy_list),2 ))
-output_validation_accurcy_list <- c(validation_accurcy_list, round(mean(validation_accurcy_list), 2))
-output_testing_accurcy_list <- c(testing_accurcy_list, round(mean(testing_accurcy_list), 2))
+output_train_accuracy_list <- c(train_accurcy_list, round(mean(train_accurcy_list),2 ), ' ',' ', 'Accuracy', all_single_test_accuracy)
+output_validation_accurcy_list <- c(validation_accurcy_list, round(mean(validation_accurcy_list), 2), ' ', ' ', ' ', ' ')
+output_testing_accurcy_list <- c(testing_accurcy_list, round(mean(testing_accurcy_list), 2), ' ', ' ', ' ', ' ')
 output_fold_list <- c(fold_list,'ave.')
 
-output_train_recall_list <- c(train_recall_list, round(mean(train_recall_list),2 ))
-output_validation_recall_list <- c(validation_recall_list, round(mean(validation_recall_list),2 ))
-output_testing_recall_list <- c(testing_recall_list, round(mean(testing_recall_list),2 ))
+output_fold_list <- c(output_fold_list, ' ', ' ', ' ', ' ')
 
-output_train_precision_list <- c(train_precision_list, round(mean(train_precision_list),2 ))
-output_validation_precision_list <- c(validation_precision_list, round(mean(validation_precision_list),2 ))
-output_testing_precision_list <- c(testing_precision_list, round(mean(testing_precision_list),2 ))
+output_train_recall_list <- c(train_recall_list, round(mean(train_recall_list),2 ), ' ',' ', 'Recall', all_single_testing_recall)
+output_validation_recall_list <- c(validation_recall_list, round(mean(validation_recall_list),2 ), ' ', ' ', ' ', ' ')
+output_testing_recall_list <- c(testing_recall_list, round(mean(testing_recall_list),2 ), ' ', ' ', ' ', ' ')
+
+output_train_precision_list <- c(train_precision_list, round(mean(train_precision_list),2), ' ',' ', 'Precision', all_single_testing_precision)
+output_validation_precision_list <- c(validation_precision_list, round(mean(validation_precision_list),2), ' ', ' ', ' ', ' ')
+output_testing_precision_list <- c(testing_precision_list, round(mean(testing_precision_list),2 ), ' ', ' ', ' ', ' ')
 
 
 output <- data.frame(Accuracy= output_fold_list, training_accuracy= output_train_accuracy_list, validation_accuracy= output_validation_accurcy_list	, test_accuracy= output_testing_accurcy_list,Precision = output_fold_list, train_precision = output_train_precision_list, validation_precision = output_validation_precision_list, test_precision = output_testing_precision_list, Recall = output_fold_list, train_recall = output_train_recall_list, validation_recall = output_validation_recall_list, test_recall = output_testing_recall_list)
@@ -209,7 +231,7 @@ split_predict_output_path <- strsplit(output_path,split='/', fixed=TRUE)
 predice_output_With_no_filename <- sapply(split_predict_output_path, head, -1)
 output_performance_filename <- sapply(split_predict_output_path, tail, 1)
 
-#輸出路徑是否存在，不存在則開資料夾
+#頛詨頝臬??摮嚗???????冗
 if(is.character(predice_output_With_no_filename)) {
   for(i in 1:length(predice_output_With_no_filename)) {
     if(dir.exists(predice_output_With_no_filename[i])) {
@@ -222,5 +244,5 @@ if(is.character(predice_output_With_no_filename)) {
   }
 }
 
-
+#write.csv(output, file = 'G1_NaiveBayes.csv', row.names = F, quote = F)
 write.csv(output, file = output_path, row.names = F, quote = F)

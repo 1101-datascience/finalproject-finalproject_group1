@@ -81,19 +81,19 @@ datasplit <- function(n,k){
 splitpoint <- datasplit(nrow(doc2),k)
 
 ##output table##
-output <- matrix(0,4+k,16)
+output <- matrix(0,2*k,16)
 output[k+3,] <- ''
 
 ##column names##
 output[1,1:4] <- c('Accuracy','training','validation','test')
-output[k+4,1] <- 'Accuracy'
+output[k+4,1:3] <- c('Accuracy','fulltrain','finaltest')
 output[1,5:8] <- c('Precision','training','validation','test')
-output[k+4,3] <- 'Precision'
+output[k+4,5:7] <- c('Precision','fulltrain','finaltest')
 output[1,9:12] <- c('Recall','training','validation','test')
-output[k+4,5] <- 'Recall'
+output[k+4,9:11] <- c('Recall','fulltrain','finaltest')
 output[1,13:16] <- c('Auc','training','validation','test')
-output[k+4,7] <- 'Auc'
-output[k+4,9:16] <- ''
+output[k+4,13:15] <- c('Auc','fulltrain','finaltest')
+output[k+4,c(4,8,12,16)] <- ''
 ##split data##
 library(rpart)
 library(ROCR)
@@ -186,28 +186,39 @@ for (j in 1:3) {
 }
 
 
-##Testing the boss and plot ROC Curve##
+##Testing the whole data boss and plot ROC Curve##
 fullmodel <- rpart(TAIEX..t.~.-date..t. ,data = doc2,control = rpart.control(maxdepth = 4),method = 'class')
-element <- predict(fullmodel,newdata = boss,type = 'class')
+resultframe_whole <- data.frame(truth=doc2$TAIEX..t.,prediction=predict(fullmodel,type = 'class'))
+table_whole <- table(resultframe_whole)
 
 ##Confusion matrix##
-resultframe_boss <- data.frame(truth=boss$TAIEX..t.,prediction=element)
+resultframe_boss <- data.frame(truth=boss$TAIEX..t.,prediction=predict(fullmodel,newdata = boss,type = 'class'))
 table_boss <- table(resultframe_boss)
 
 ##Accuracy##
-output[k+4,2] <- round((table_boss[1,1]+table_boss[2,2])/sum(table_boss),2)
+output[2*k,2] <- round((table_whole[1,1]+table_whole[2,2])/sum(table_whole),2)
+output[2*k,3] <- round((table_boss[1,1]+table_boss[2,2])/sum(table_boss),2)
 
 ##Precision##
-output[k+4,4] <- round(table_boss[2,2]/sum(table_boss[,2]),2)
+output[2*k,6] <- round(table_whole[2,2]/sum(table_whole[,2]),2)
+output[2*k,7] <- round(table_boss[2,2]/sum(table_boss[,2]),2)
 
 ##Recall##
-output[k+4,6] <- round(table_boss[2,2]/sum(table_boss[2,]),2)
+output[2*k,10] <- round(table_whole[2,2]/sum(table_whole[2,]),2)
+output[k*2,11] <- round(table_boss[2,2]/sum(table_boss[2,]),2)
 
 ##Auc&ROC Curve##
+element <- predict(fullmodel,type = 'prob')[,2]
+fulltrain_auc <- prediction(element,as.vector(doc2$TAIEX..t.))
+auc_fulltain <-  performance(fulltrain_auc,"auc")@y.values
+output[2*k,14] <- round(as.numeric(auc_fulltain),2)
+
 element2 <- predict(fullmodel,newdata = boss,type = 'prob')[,2]
 boss_auc <- prediction(element2,as.vector(boss$TAIEX..t.))
 auc_boss <-  performance(boss_auc,"auc")@y.values
-output[k+4,8] <- round(as.numeric(auc_boss),2)
+output[2*k,15] <- round(as.numeric(auc_boss),2)
+
+output[2*k,c(1,4,5,8,9,12,13,16)] <- ''
 
 roc <- performance(prediction(element2,as.vector(boss$TAIEX..t.)),'tpr','fpr')
 plot(roc,colorize=T)

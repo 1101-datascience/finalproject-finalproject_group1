@@ -1,10 +1,11 @@
 # [Group] 以股為鏡--台股加權預測
 
 ### Groups
-* name, student ID1
-* name, student ID2
-* name, student ID3
-* ...
+* 趙啟宏 統計三   108304010
+* 謝政彥 資科碩二 109753207
+* 張皓博 資科碩一 110753113
+* 鄭詠儒 資科碩一 110753126
+* 林依樺 資科碩一 110753207
 
 ### Goal
 A breif introduction about your project, i.e., what is your goal?
