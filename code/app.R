@@ -73,12 +73,14 @@ ui <- fluidPage(
                           tabPanel(h2("Only Diff"),
                                    datatable(diff_data),
                                    h3("Data Correlations"),
-                                   plotOutput('cor_diff')
+                                   plotOutput('cor_diff'), 
+                                   plotOutput('boxplot_diff')
                                    # verbatimTextOutput("pcaResult")
                           ),
                           tabPanel(h2("Data add Feature"),
                                    datatable(add_features_data),
-                                   plotOutput('cor_add')
+                                   plotOutput('cor_add'),
+                                   plotOutput('boxplot_add')
                                    # verbatimTextOutput("pcaSummary"))
                           )
                           
@@ -215,6 +217,22 @@ server <- function(input, output) {
     boxplot(data[1:nrow(data),1:(ncol(data)-1)])
     
   })
+  output$boxplot_diff<-renderPlot({
+    names(diff_data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
+    diff_data1 <- diff_data[-6]
+    diff_data1 <- diff_data1[-1]
+    boxplot(diff_data1[1:nrow(diff_data1),1:(ncol(diff_data1)-1)])
+    })
+  output$boxplot_add<-renderPlot({
+    
+    names(add_features_data)<-c(
+      "Date"               ,  "SOX_Close"          ,"SOX_Close_log"       ,"Jones_Close"    ,"Dow.Jones_Close_log",
+      "NASDAQ_Close"       ,"NASDAQ_Close_log"    ,"S_P_500_Close."     , "S_P_500_Close_log"   ,"total_net_tsmc"    ,
+      "Bitcoin_Change" ,   "up_sum"           ,        "SOX_Close_up"        ,"Dow.Jones_Close_up","NASDAQ_Close_up","Bitcoin_Change_up","S_P_500_Close_up","total_net_tsmc_.up","TAIEX_before"  ,"TAIEX"               
+    )
+    add_features_data1<-add_features_data[,2:12]
+    boxplot(add_features_data1[1:nrow(add_features_data1),1:(ncol(add_features_data1))])
+    })
   
   
   output$AUC_nb <-
