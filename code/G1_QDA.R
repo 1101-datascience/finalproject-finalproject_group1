@@ -34,8 +34,9 @@ if(!file.exists(input_path)) {
   stop("No such train file", call.=FALSE)
 }
 
-#df <- read.csv(input_path, header=T)
-df <- read.csv('../dataset/ourdata.csv', header=T)
+df <- read.csv(input_path, header=T)
+#df <- read.csv('../dataset/ourdata.csv', header=T)
+#df <- read.csv('ourdata.csv', header=T)
 
 df <- df[,2:8]
 
@@ -130,8 +131,8 @@ for(i in 1:k){
       train_set <- subset(df, df$V1 < (k-2)/k)
     else 
       train_set_part1 <- subset(df, df$V1 > (i+1)/k)
-      train_set_part2 <- subset(df, df$V1 <= (i-1)/k)
-      train_set <- rbind(train_set_part1,train_set_part2)
+    train_set_part2 <- subset(df, df$V1 <= (i-1)/k)
+    train_set <- rbind(train_set_part1,train_set_part2)
   }
   
   
@@ -148,35 +149,16 @@ for(i in 1:k){
   #Plot ROC curve and AUC Value 
   plot(roc(train_set[,7],res), print.auc=TRUE)
   
-  # Train_nullmodel
-  #train_nullmodel <- factor(rep_len(0, dim(train_set)[1]),levels=c(0,1))
-  train_nullmodel <- rbinom(dim(train_set)[1], 1, 0.5)
-  train_label <- train_set$TAIEX
-  train_null_Matrix <- table(train_label,train_nullmodel)
-  #print(null_Matrix)
-  
   # Train_accuracy
   single_train_accuracy = ((train_Matrix[1,1]+train_Matrix[2,2])/dim(train_set)[1])
   train_accurcy_list <- c(train_accurcy_list, round(single_train_accuracy, 2))
-  # Train_Null_accuracy
-  single_null_train_accuracy = ((train_null_Matrix[1,1]+train_null_Matrix[2,2])/dim(train_set)[1])
-  train_null_accurcy_list <- c(train_null_accurcy_list, round(single_null_train_accuracy, 2))
-  
   # Train_recall
   single_train_recall <- (train_Matrix[2,2]/(train_Matrix[2,1]+train_Matrix[2,2]))
   train_recall_list <- c(train_recall_list, round(single_train_recall, 2))
-  # Train_null_recall
-  single_null_train_recall = (train_null_Matrix[2,2]/(train_null_Matrix[2,1]+train_null_Matrix[2,2]))
-  train_null_recall_list <- c(train_null_recall_list, round(single_null_train_recall, 2))
-  
   # Train_precision
   single_train_precision <- (train_Matrix[2,2]/(train_Matrix[1,2]+train_Matrix[2,2]))
   train_precision_list <- c(train_precision_list, round(single_train_precision, 2))
-  # Train_null_precision
-  single_null_train_precision = (train_null_Matrix[2,2]/(train_null_Matrix[1,2]+train_null_Matrix[2,2]))
-  train_null_precision_list <- c(train_null_precision_list, round(single_null_train_precision, 2))
-  
-  
+
   
   
   ##################### validation
@@ -187,33 +169,17 @@ for(i in 1:k){
   res <- model_Pred$class
   res <- as.numeric(as.character(res))
   validation_Matrix <- table(res, Validation_y)
-  # validation_nullmodel
-  #validation_nullmodel <- factor(rep_len(0, dim(Validation_set)[1]),levels=c(0,1))
-  validation_nullmodel <- rbinom(dim(Validation_set)[1], 1, 0.5)
-  validation_label <- Validation_set$TAIEX
-  validtion_null_Matrix <- table(validation_label,validation_nullmodel)
-  
+
   # Validation_accuracy
   single_validation_accuracy <- ((validation_Matrix[1,1]+validation_Matrix[2,2])/dim(Validation_set)[1])
   validation_accurcy_list <- c(validation_accurcy_list, round(single_validation_accuracy, 2))
-  # Validation_Null_accuracy
-  single_null_validation_accuracy = ((validtion_null_Matrix[1,1]+validtion_null_Matrix[2,2])/dim(Validation_set)[1])
-  validation_null_accurcy_list <- c(validation_null_accurcy_list, round(single_null_validation_accuracy, 2))
-  
   # Validation_recall
   single_validation_recall <- (validation_Matrix[2,2]/(validation_Matrix[2,1]+validation_Matrix[2,2]))
   validation_recall_list  <- c(validation_recall_list, round(single_validation_recall, 2))
-  # Validation_Null_recall
-  single_null_validation_recall <- (validtion_null_Matrix[2,2]/(validtion_null_Matrix[2,1]+validtion_null_Matrix[2,2]))
-  validation_null_recall_list <- c(validation_null_recall_list, round(single_null_validation_recall, 2))
-  
   # Validation_precision
   single_validation_precision <- (validation_Matrix[2,2]/(validation_Matrix[1,2]+validation_Matrix[2,2]))
   validation_precision_list  <- c(validation_precision_list, round(single_validation_precision, 2))
-  # Validation_Null_precision
-  single_null_validation_precision <- (validtion_null_Matrix[2,2]/(validtion_null_Matrix[1,2]+validtion_null_Matrix[2,2]))
-  validation_null_precision_list <- c(validation_null_precision_list, round(single_null_validation_precision, 2))
-  
+
   
   ##################### Test
   testing_x <-  testing_set[,1:6]
@@ -224,35 +190,17 @@ for(i in 1:k){
   res <- as.numeric(as.character(res))
   test_Matrix <- table(res, testing_y)
   
-  # test_nullmodel
-  test_nullmodel <- rbinom(dim(testing_set)[1], 1, 0.5)
-  test_label <- testing_set$TAIEX
-  test_null_Matrix <- table(test_label,test_nullmodel)
-  
-  
+
   # Test_accuracy
   single_test_accuracy = ((test_Matrix[1,1]+test_Matrix[2,2])/dim(testing_set)[1])
   testing_accurcy_list <- c(testing_accurcy_list, round(single_test_accuracy, 2))
-  
-
-  # Test_Null_accuracy
-  single_null_test_accuracy = ((test_null_Matrix[1,1]+test_null_Matrix[2,2])/dim(testing_set)[1])
-  test_null_accurcy_list <- c(test_null_accurcy_list, round(single_null_test_accuracy, 2))
-  
   # Test_recall
   single_testing_recall <- (test_Matrix[2,2]/(test_Matrix[2,1]+test_Matrix[2,2]))
   testing_recall_list  <- c(testing_recall_list, round(single_testing_recall, 2))
-  # Test_Null_recall
-  single_null_test_recall <- (test_null_Matrix[2,2]/(test_null_Matrix[2,1]+test_null_Matrix[2,2]))
-  test_null_recall_list <- c(test_null_recall_list, round(single_null_test_recall, 2))
-  
   # Test_precision
   single_testing_precision <- (test_Matrix[2,2]/(test_Matrix[1,2]+test_Matrix[2,2]))
   testing_precision_list  <- c(testing_precision_list, round(single_testing_precision, 2))
-  # Validation_Null_precision
-  single_null_test_precision <- (test_null_Matrix[2,2]/(test_null_Matrix[1,2]+test_null_Matrix[2,2]))
-  test_null_precision_list <- c(test_null_precision_list, round(single_null_test_precision, 2))
-  
+
   
   fold_list <- c(fold_list, paste("fold",i))
 }
@@ -273,27 +221,6 @@ output_validation_precision_list <- c(validation_precision_list, round(mean(vali
 output_testing_precision_list <- c(testing_precision_list, round(mean(testing_precision_list),2 ), " ")
 
 output <- data.frame(Accuracy= output_fold_list, training_accuracy= output_train_accuracy_list, validation_accuracy= output_validation_accurcy_list	, test_accuracy= output_testing_accurcy_list,Precision = output_fold_list, train_precision = output_train_precision_list, validation_precision = output_validation_precision_list, test_precision = output_testing_precision_list, Recall = output_fold_list, train_recall = output_train_recall_list, validation_recall = output_validation_recall_list, test_recall = output_testing_recall_list)
-#print(output)
-
-#Null Model
-output_null_train_accuracy_list <- c(train_null_accurcy_list, round(mean(train_null_accurcy_list),2 ), " ")
-output_null_validation_accurcy_list <- c(validation_null_accurcy_list, round(mean(validation_null_accurcy_list), 2), " ")
-output_null_testing_accurcy_list <- c(test_null_accurcy_list, round(mean(test_null_accurcy_list), 2), " ")
-
-output_null_train_recall_list <- c(train_null_recall_list, round(mean(train_null_recall_list),2 ), " ")
-output_null_validation_recall_list <- c(validation_null_recall_list, round(mean(validation_null_recall_list),2 ), " ")
-output_null_test_recall_list <- c(test_null_recall_list, round(mean(test_null_recall_list),2 ), " ")
-
-output_null_train_precision_list <- c(train_null_precision_list, round(mean(train_null_precision_list),2 ), " ")
-output_null_validation_precision_list <- c(validation_null_precision_list, round(mean(validation_null_precision_list),2 ), " ")
-output_null_test_precision_list <- c(test_null_precision_list, round(mean(test_null_precision_list),2 ), " ")
-
-null_output <- data.frame(Accuracy= output_fold_list, training_accuracy= output_null_train_accuracy_list, validation_accuracy= output_null_validation_accurcy_list, test_accuracy= output_null_testing_accurcy_list,
-                          Precision = output_fold_list, train_precision = output_null_train_precision_list, validation_precision = output_null_validation_precision_list, test_precision = output_null_test_precision_list, 
-                          Recall = output_fold_list, train_recall = output_null_train_recall_list, validation_recall = output_null_validation_recall_list, test_recall = output_null_test_recall_list)
-
-final_QDA <- rbind(output,null_output)
-
 
 
 split_predict_output_path <- strsplit(output_path,split='/', fixed=TRUE)
@@ -313,6 +240,7 @@ if(is.character(predice_output_With_no_filename)) {
   }
 }
 
-#write.csv(final_QDA, file = output_path, row.names = F, quote = F)
+write.csv(output, file = output_path, row.names = F, quote = F)
 
-write.csv(final_QDA, file = 'G1_QDA.csv', row.names = F, quote = F)
+#write.csv(output, file = 'G1_QDA.csv', row.names = F, quote = F)
+
