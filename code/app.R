@@ -16,7 +16,8 @@ diff_data<-data.frame(diff_data)
 add_features_data <- read.csv("../data/ourdata_addFeatures5.csv", header = T)
 add_features_data<-data.frame(add_features_data)
 
-overview_cros <- read.csv("../results/CROSS_OVERVIEW.csv", header = T)
+overview_cros_train <- read.csv("../results/overview_cros_train.csv", header = T)
+overview_cros_valid <- read.csv("../results/overview_cros_vaild.csv", header = T)
 
 ui <- fluidPage(
   title = "Data Science Final Project - Group 1",
