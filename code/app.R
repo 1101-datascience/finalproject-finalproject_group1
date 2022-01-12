@@ -117,10 +117,16 @@ ui <- fluidPage(
 )
 
 server <- function(input, output) {
-  data(iris)
+ # data(iris)
+  data <- read.csv("//data/ourdata.csv", header = T)
+#  data<-data.frame(data)
+
+  names(data) <- c("Date","SOX_Close","Dow.Jones_Close","NASDAQ_Close","Bitcoin_Change","S_P_500_Close","total_net_tsmc","TAIEX")
+  data <- data[-6]
+  data <- data[-1]
   
   output$cor<-renderPlot({
-    corrplot(abs(cor(iris[1:nrow(iris),1:ncol(iris)-1]))
+    corrplot(abs(cor(data[1:nrow(data),1:(ncol(data)-1)]))
              ,method='color',type='full'
              ,bg='black'
              ,addgrid.col='black',tl.cex=0.6,tl.col='grey')})
