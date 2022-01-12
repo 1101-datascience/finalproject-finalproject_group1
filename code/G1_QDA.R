@@ -208,10 +208,10 @@ for(i in 1:k){
 all_train_x <-  df[,1:6]
 all_train_y <-  df[,7]
 qda_model <- qda(all_train_x, all_train_y)
-model_Pred <- predict(qda_model, testing_x)
+model_Pred <- predict(qda_model, all_train_x)
 res <- model_Pred$class
 res <- as.numeric(as.character(res))
-all_test_Matrix <- table(res, testing_y)
+all_test_Matrix <- table(res, all_train_y)
 
 
 # Test_accuracy
@@ -226,7 +226,9 @@ all_single_testing_recall <- round(all_single_testing_recall,2)
 all_single_testing_precision <- (all_test_Matrix[2,2]/(all_test_Matrix[1,2]+all_test_Matrix[2,2]))
 all_single_testing_precision <- round(all_single_testing_precision,2)
 
-
+print(all_single_test_accuracy)
+print(all_single_testing_recall)
+print(all_single_testing_precision)
 #QDA Model
 output_train_accuracy_list <- c(train_accurcy_list, round(mean(train_accurcy_list),2 ), ' ',' ', 'Accuracy', all_single_test_accuracy)
 output_validation_accurcy_list <- c(validation_accurcy_list, round(mean(validation_accurcy_list), 2), ' ', ' ', ' ', ' ')
@@ -245,7 +247,7 @@ output_testing_precision_list <- c(testing_precision_list, round(mean(testing_pr
 
 
 output <- data.frame(Accuracy= output_fold_list, training_accuracy= output_train_accuracy_list, validation_accuracy= output_validation_accurcy_list	, test_accuracy= output_testing_accurcy_list,Precision = output_fold_list, train_precision = output_train_precision_list, validation_precision = output_validation_precision_list, test_precision = output_testing_precision_list, Recall = output_fold_list, train_recall = output_train_recall_list, validation_recall = output_validation_recall_list, test_recall = output_testing_recall_list)
-
+#print(output)
 
 split_predict_output_path <- strsplit(output_path,split='/', fixed=TRUE)
 predice_output_With_no_filename <- sapply(split_predict_output_path, head, -1)
@@ -264,7 +266,7 @@ if(is.character(predice_output_With_no_filename)) {
   }
 }
 
-#write.csv(output, file = output_path, row.names = F, quote = F)
+write.csv(output, file = output_path, row.names = F, quote = F)
 
-write.csv(output, file = 'G1_QDA.csv', row.names = F, quote = F)
+#write.csv(output, file = 'G1_QDA.csv', row.names = F, quote = F)
 
