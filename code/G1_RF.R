@@ -175,9 +175,11 @@ myFolds <- c()
 for(i in 1:k){
   #print(i)
   #i <- 3
-  myTestingData <- d_[split==i,]
-  myValidatingData <- d_[split==((i%%k)+1),]
-  delrows <- c(row.names(myTestingData),row.names(myValidatingData),sort=TRUE)
+  #myTestingData <- d_[split==i,]
+  #myValidatingData <- d_[split==((i%%k)+1),]
+  myValidatingData <- d_[split==i,]
+  #delrows <- c(row.names(myTestingData),row.names(myValidatingData),sort=TRUE)
+  delrows <- c(row.names(myValidatingData),sort=TRUE)
   numdelrows <- as.numeric(delrows[1:(length(delrows)-1)])
   myTrainingData <- d_[-numdelrows,]
 
@@ -200,11 +202,11 @@ for(i in 1:k){
   null_AUC_Validating[i] <- performance(prediction(rbinom(dim(myValidatingData)[1], 1, 0.5),myValidatingData$TAIEX..t.),"auc")@y.values[[1]]
   
     #testing
-  pre_testinging <- predict(rf_model, myTestingData, 'prob')
-  output <- pre_testinging[,2]
-  modelroc_testingting <- roc(myTestingData$TAIEX..t.,output)
-  myAUC_Testing[i] <- modelroc_testingting$auc[1]
-  null_AUC_Testing[i] <- performance(prediction(rbinom(dim(myTestingData)[1], 1, 0.5),myTestingData$TAIEX..t.),"auc")@y.values[[1]]
+  #pre_testinging <- predict(rf_model, myTestingData, 'prob')
+  #output <- pre_testinging[,2]
+  #modelroc_testingting <- roc(myTestingData$TAIEX..t.,output)
+  #myAUC_Testing[i] <- modelroc_testingting$auc[1]
+  #null_AUC_Testing[i] <- performance(prediction(rbinom(dim(myTestingData)[1], 1, 0.5),myTestingData$TAIEX..t.),"auc")@y.values[[1]]
   
   ##### Accuracy, Precision, Recall
     #training data
@@ -234,17 +236,17 @@ for(i in 1:k){
   null_Precision_Validating[i] <- null_myTable[2,2]/sum(null_myTable[2,])
   
     #testing data
-  myPrediction_Testing <- predict(rf_model, myTestingData)
-  myTable <- table(as.factor(myPrediction_Testing), as.factor(myTestingData$TAIEX..t.))
-  myAccuracy_Testing[i] <- sum(diag(myTable))/sum(myTable)
-  myRecall_Testing[i] <- myTable[2,2]/sum(myTable[,2])
-  myPrecision_Testing[i] <- myTable[2,2]/sum(myTable[2,])
+  #myPrediction_Testing <- predict(rf_model, myTestingData)
+  #myTable <- table(as.factor(myPrediction_Testing), as.factor(myTestingData$TAIEX..t.))
+  #myAccuracy_Testing[i] <- sum(diag(myTable))/sum(myTable)
+  #myRecall_Testing[i] <- myTable[2,2]/sum(myTable[,2])
+  #myPrecision_Testing[i] <- myTable[2,2]/sum(myTable[2,])
   
     #null model
-  null_myTable <- table(as.factor(factor(rbinom(dim(myTestingData)[1], 1, 0.5),levels=0:1)), as.factor(myTestingData$TAIEX..t.))
-  null_Accuracy_Testing[i] <- sum(diag(null_myTable))/sum(null_myTable)
-  null_Recall_Testing[i] <- null_myTable[2,2]/sum(null_myTable[,2])
-  null_Precision_Testing[i] <- null_myTable[2,2]/sum(null_myTable[2,])
+  #null_myTable <- table(as.factor(factor(rbinom(dim(myTestingData)[1], 1, 0.5),levels=0:1)), as.factor(myTestingData$TAIEX..t.))
+  #null_Accuracy_Testing[i] <- sum(diag(null_myTable))/sum(null_myTable)
+  #null_Recall_Testing[i] <- null_myTable[2,2]/sum(null_myTable[,2])
+  #null_Precision_Testing[i] <- null_myTable[2,2]/sum(null_myTable[2,])
   
   myFolds[i]<-paste('fold',i,sep='')
 }
@@ -358,39 +360,35 @@ plot(roc(myTest_byAcc$TAIEX..t., myPrediction_rf_testing_AUC[,2]), main = "Rando
 dev.off()
 
 ##########
-df_rf <- data.frame(AUC=c(myFolds,"ave."),
-                    Training=round(c(myAUC_Training,mean(myAUC_Training)),2),
-                    Validation=round(c(myAUC_Validating,mean(myAUC_Validating)),2),
-                    Testing=round(c(myAUC_Testing,mean(myAUC_Testing)),2),
-                    Accuracy=c(myFolds,"ave."),
-                    Training=round(c(myAccuracy_Training,mean(myAccuracy_Training)),2),
-                    Validation=round(c(myAccuracy_Validating,mean(myAccuracy_Validating)),2),
-                    Testing=round(c(myAccuracy_Testing,mean(myAccuracy_Testing)),2),
-                    Precision=c(myFolds,"ave."),
-                    Training=round(c(myPrecision_Training,mean(myPrecision_Training)),2),
-                    Validation=round(c(myPrecision_Validating,mean(myPrecision_Validating)),2),
-                    Testing=round(c(myPrecision_Testing,mean(myPrecision_Testing)),2),
-                    Recall=c(myFolds,"ave."),
-                    Training=round(c(myRecall_Training,mean(myRecall_Training)),2),
-                    Validation=round(c(myRecall_Validating,mean(myRecall_Validating)),2),
-                    Testing=round(c(myRecall_Testing,mean(myRecall_Testing)),2))
+df_rf <- data.frame(RF_Model=c(myFolds,"ave."),
+                    Train_AUC=round(c(myAUC_Training,mean(myAUC_Training)),2),
+                    Valid_AUC=round(c(myAUC_Validating,mean(myAUC_Validating)),2),
+                    #Testing=round(c(myAUC_Testing,mean(myAUC_Testing)),2),
+                    Train_AC=round(c(myAccuracy_Training,mean(myAccuracy_Training)),2),
+                    Valid_AC=round(c(myAccuracy_Validating,mean(myAccuracy_Validating)),2),
+                    #Testing=round(c(myAccuracy_Testing,mean(myAccuracy_Testing)),2),
+                    Train_Precision=round(c(myPrecision_Training,mean(myPrecision_Training)),2),
+                    Valid_Precision=round(c(myPrecision_Validating,mean(myPrecision_Validating)),2),
+                    #Testing=round(c(myPrecision_Testing,mean(myPrecision_Testing)),2),
+                    Train_Recall=round(c(myRecall_Training,mean(myRecall_Training)),2),
+                    Valid_Recall=round(c(myRecall_Validating,mean(myRecall_Validating)),2)
+)
+                    #Testing=round(c(myRecall_Testing,mean(myRecall_Testing)),2))
 
-df_null <- data.frame(AUC=c(myFolds,"ave."),
-                    null_Training=round(c(null_AUC_Training,mean(null_AUC_Training)),2),
-                    null_Validation=round(c(null_AUC_Validating,mean(null_AUC_Validating)),2),
-                    null_Testing=round(c(null_AUC_Testing,mean(null_AUC_Testing)),2),
-                    Accuracy=c(myFolds,"ave."),
-                    null_Training=round(c(null_Accuracy_Training,mean(null_Accuracy_Training)),2),
-                    null_Validation=round(c(null_Accuracy_Validating,mean(null_Accuracy_Validating)),2),
-                    null_Testing=round(c(null_Accuracy_Testing,mean(null_Accuracy_Testing)),2),
-                    Precision=c(myFolds,"ave."),
-                    null_Training=round(c(null_Precision_Training,mean(null_Precision_Training)),2),
-                    null_Validation=round(c(null_Precision_Validating,mean(null_Precision_Validating)),2),
-                    null_Testing=round(c(null_Precision_Testing,mean(null_Precision_Testing)),2),
-                    Recall=c(myFolds,"ave."),
-                    null_Training=round(c(null_Recall_Training,mean(null_Recall_Training)),2),
-                    null_Validation=round(c(null_Recall_Validating,mean(null_Recall_Validating)),2),
-                    null_Testing=round(c(null_Recall_Testing,mean(null_Recall_Testing)),2))
+df_null <- data.frame(RF_Model=c(myFolds,"ave."),
+                    null_Train_AUC=round(c(null_AUC_Training,mean(null_AUC_Training)),2),
+                    null_Valid_AUC=round(c(null_AUC_Validating,mean(null_AUC_Validating)),2),
+                    #null_Testing=round(c(null_AUC_Testing,mean(null_AUC_Testing)),2),
+                    null_Train_AC=round(c(null_Accuracy_Training,mean(null_Accuracy_Training)),2),
+                    null_Valid_AC=round(c(null_Accuracy_Validating,mean(null_Accuracy_Validating)),2),
+                    #null_Testing=round(c(null_Accuracy_Testing,mean(null_Accuracy_Testing)),2),
+                    null_Train_Precision=round(c(null_Precision_Training,mean(null_Precision_Training)),2),
+                    null_Valid_Precision=round(c(null_Precision_Validating,mean(null_Precision_Validating)),2),
+                    #null_Testing=round(c(null_Precision_Testing,mean(null_Precision_Testing)),2),
+                    null_Train_Recall=round(c(null_Recall_Training,mean(null_Recall_Training)),2),
+                    null_Valid_Recall=round(c(null_Recall_Validating,mean(null_Recall_Validating)),2)
+)
+                    #null_Testing=round(c(null_Recall_Testing,mean(null_Recall_Testing)),2))
 
 df_rf_evaluation <- data.frame(Data=c('training data','100 testing data'), 
                                Accuracy=c(myAccuracy_Training,myAccuracy_Testing),
