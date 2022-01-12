@@ -15,17 +15,16 @@ args = commandArgs(trailingOnly=TRUE)
 # k <- as.numeric(args[2])
 train_path <- args[2]
 report_path <- args[4]
-AUC_jpg_path<- args[6]
 # predict_path<-args[10]
 # 
 
 seed<-10
 set.seed(seed)
 
-# 
-train_path<-"data/ourdata.csv"
-report_path <-"results/G1_SVM_Metrics_L.csv"
-report_end_path <-"results/G1_SVM_Mestrics_alltrain_L.csv"
+#
+# train_path<-"data/only_diff.csv"
+# report_path <-"results/G1_SVM_Metrics_L_diff.csv"
+# # report_end_path <-"results/G1_SVM_Mestrics_alltrain_L.csv"
 ROC_train_jpg_path<-"image/G1_SVM_ROCR_train_L.jpg"
 ROC_test_jpg_path<-"image/G1_SVM_ROCR_test_L.jpg"
 
@@ -239,26 +238,26 @@ write.table(data.frame(Mectrics=c('ACC','Percision','Recall','AUC'),
                        test=c(test_ACC,test_p,test_recall,test_auc),stringsAsFactors = F)
             ,file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
 
-# test:AUC ACC P Recall ROC
-jpeg(file=ROC_train_jpg_path)
-plot(performance(prediction(predict(model, probability=TRUE),train_data$TAIEX..t.), "tpr","fpr"),lwd= 3,col='red',main= "SVM ROC Curve on Test Data")
-grid(nx = NULL, ny = NULL,
-     lty = 2,      # Grid line type
-     col = "gray", # Grid line color
-     lwd = 0.2)    
-abline(a=0, b=1, lty=2, lwd=3, col="black")
-dev.off()
-
-
-
-jpeg(file=ROC_test_jpg_path)
-
-plot(performance(prediction(test_pred,test_set$TAIEX..t.), "tpr","fpr"),lwd= 3,col='red',main= "SVM ROC Curve on Test Data")
-grid(nx = NULL, ny = NULL,
-     lty = 2,      # Grid line type
-     col = "gray", # Grid line color
-     lwd = 0.2)    
-abline(a=0, b=1, lty=2, lwd=3, col="black")
-dev.off()
+# # test:AUC ACC P Recall ROC
+# jpeg(file=ROC_train_jpg_path)
+# plot(performance(prediction(predict(model, probability=TRUE),train_data$TAIEX..t.), "tpr","fpr"),lwd= 3,col='red',main= "SVM ROC Curve on Test Data")
+# grid(nx = NULL, ny = NULL,
+#      lty = 2,      # Grid line type
+#      col = "gray", # Grid line color
+#      lwd = 0.2)
+# abline(a=0, b=1, lty=2, lwd=3, col="black")
+# dev.off()
+# 
+# # 
+# 
+# jpeg(file=ROC_test_jpg_path)
+# 
+# plot(performance(prediction(test_pred,test_set$TAIEX..t.), "tpr","fpr"),lwd= 3,col='red',main= "SVM ROC Curve on Test Data")
+# grid(nx = NULL, ny = NULL,
+#      lty = 2,      # Grid line type
+#      col = "gray", # Grid line color
+#      lwd = 0.2)
+# abline(a=0, b=1, lty=2, lwd=3, col="black")
+# dev.off()
 
 

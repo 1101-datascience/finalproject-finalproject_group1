@@ -11,8 +11,8 @@ report_path <- args[4]
 seed<-10
 set.seed(seed)
 
-# # 
-# train_path<-"data/ourdata.csv"
+# #
+# train_path<-"data/only_diff.csv"
 # report_path <-"results/G1_SVM_Metrics_diff.csv"
 # # report_end_path <-"results/G1_SVM_Mestrics_alltrain.csv"
 # ROC_train_jpg_path<-"image/G1_SVM_ROCR_train.jpg"
