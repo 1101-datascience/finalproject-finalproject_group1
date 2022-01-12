@@ -24,10 +24,10 @@ set.seed(seed)
 
 # 
 train_path<-"data/ourdata.csv"
-report_path <-"results/G1_SVM_Metrics.csv"
-report_end_path <-"results/G1_SVM_Mestrics_alltrain.csv"
-ROC_train_jpg_path<-"image/G1_SVM_ROCR_train.jpg"
-ROC_test_jpg_path<-"image/G1_SVM_ROCR_test.jpg"
+report_path <-"results/G1_SVM_Metrics_L.csv"
+report_end_path <-"results/G1_SVM_Mestrics_alltrain_L.csv"
+ROC_train_jpg_path<-"image/G1_SVM_ROCR_train_L.jpg"
+ROC_test_jpg_path<-"image/G1_SVM_ROCR_test_L.jpg"
 
 k<-5
 
@@ -82,26 +82,26 @@ for (i in 1:k){
   print(paste(paste("=======iteration:",as.character(i)),"=======")) #直接取出平軍分配後的rownames
   vali_set<- train_data[which(group_index==i),]
   train_set<-train_data[-(which(group_index==i)),]
-  
-  # model <- svm(TAIEX..t.~.,
-  #              data=train_set,
-  #              probability=TRUE,
-  #              scale = TRUE,
-  #              kernel='linear',
-  #              cost=1,
-  #              epsilon=0.1,tolerance=0.01
-  # ) 
-  # #0.55
 
   model <- svm(TAIEX..t.~.,
                data=train_set,
                probability=TRUE,
                scale = TRUE,
-               kernel='radial',
+               kernel='linear',
                cost=1,
-               sigma = 0.0003013302 ,
-               # epsilon=0.1,tolerance=0.01
+               epsilon=0.1,tolerance=0.01
   )
+  # #0.55
+  
+  # model <- svm(TAIEX..t.~.,
+  #              data=train_set,
+  #              probability=TRUE,
+  #              scale = TRUE,
+  #              kernel='radial',
+  #              cost=1,
+  #              sigma = 0.0003013302 ,
+  #              # epsilon=0.1,tolerance=0.01
+  # )
   
   # AUC
   
@@ -126,7 +126,7 @@ for (i in 1:k){
   validation_p<-c(validation_p,vali_CM[2,2]/(vali_CM[2,2]+vali_CM[1,2]))   
   
   
- 
+  
   
 }
 
@@ -162,11 +162,11 @@ validation_p
 out_data<-data.frame( ACC=set,
                       train_ACC =	training_ACC ,
                       validation_ACC =	validation_ACC ,
-                     
+                      
                       recall =set,
                       train_recall =	training_recall ,
                       validation_recall =
-	validation_recall ,
+                        validation_recall ,
                       
                       percion=set,
                       training_p =	training_p ,
@@ -204,10 +204,9 @@ model <- svm(TAIEX..t.~.,
              data=train_data,
              probability=TRUE,
              scale = TRUE,
-             kernel='radial',
+             kernel='linear',
              cost=1,
-             sigma = 0.0003013302 ,
-             # epsilon=0.1,tolerance=0.01
+             epsilon=0.1,tolerance=0.01
 )
 
 
@@ -236,8 +235,8 @@ test_p<-test_CM[2,2]/(test_CM[2,2]+test_CM[1,2])
 
 
 write.table(data.frame(Mectrics=c('ACC','Percision','Recall','AUC'),
-            train=c(training_ACC,training_p,test_recall,train_auc),
-            test=c(test_ACC,test_p,test_recall,test_auc),stringsAsFactors = F)
+                       train=c(training_ACC,training_p,test_recall,train_auc),
+                       test=c(test_ACC,test_p,test_recall,test_auc),stringsAsFactors = F)
             ,file=report_path,quote=FALSE,sep=",",row.names=FALSE, na = "NA",append = TRUE)
 
 # test:AUC ACC P Recall ROC
