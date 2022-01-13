@@ -1,7 +1,47 @@
-[TOC]
-
 # Group1. 以股為鏡--台股上漲預測
+<!-- TOC titleSize:2 tabSpaces:2 depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 skip:0 title:1 charForUnorderedList:* -->
+## Table of Contents
+* [Group1. 以股為鏡--台股上漲預測](#group1---)
+    * [Menbers](#menbers)
+    * [Our Goal](#our-goal)
+* [Folder organization and its related information](#folder-organization-and-its-related-information)
+    * [docs](#docs)
+    * [data](#data)
+    * [code](#code)
+    * [results](#results)
+    * [Future Work](#future-work)
+  * [Model](#model)
+    * [Logistic Regression](#logistic-regression)
 
+    * [QDA](#qda)
+    * [NaiveBayes](#naivebayes)
+    * [Decision Tree](#decision-tree)
+    * [Random Forest](#random-forest)
+    * [SVM](#svm)
+      * [**CNN & TCN**](#cnn--tcn)
+      * [**Import**](#import)
+      * [**Data pre-processing**](#data-pre-processing)
+      * [**Data Reshape**](#data-reshape)
+      * [**Build CNN and TCN Model**](#build-cnn-and-tcn-model)
+      * [**TCN**](#tcn)
+      * [**CNN**](#cnn)
+      * [**Train Model**](#train-model)
+      * [**Predict**](#predict)
+      * [**Performance**](#performance)
+      * [**TCN**](#tcn)
+      * [**CNN**](#cnn)
+    * [**LSTM**](#lstm)
+      * [**Import**](#import)
+      * [**Split train and test data**](#split-train-and-test-data)
+      * [**Convert data type and reshape**](#convert-data-type-and-reshape)
+      * [**Build LSTM Model**](#build-lstm-model)
+      * [**Train Model**](#train-model)
+      * [**Predict**](#predict)
+      * [**Performance**](#performance)
+  * [**References**](#references)
+    * [Packages you use](#packages-you-use)
+    * [Related publications](#related-publications)
+<!-- /TOC -->
 ### Menbers
 
 | Name |  Dep. |  StudentID |
