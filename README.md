@@ -752,11 +752,8 @@ library(gridExtra)
 library(shiny)
 library(DT)
 library("corrplot")
-<<<<<<< HEAD
-library(reactable
-=======
 library(reactable)
->>>>>>> 6db7a0f1f7995254b16000d8effedae848e653ed
+
 ```
 
 ### Related publications
