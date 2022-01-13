@@ -38,9 +38,15 @@ Shiny:https://yungrujeng.shinyapps.io/finalproject-finalproject_group1
 ### data
 
 * Source
+    *
 * Any preprocessing?
-  * Scale value
-  * Creating new features
+  * `our_data.csv`將各指標轉為第(t-1)天的數值，以及第t天整體是否漲跌的lable。
+  * Creating new features:
+      * `only_diff.csv`:將指數轉換成漲跌幅百分比，並保留百分比捨棄原始資料。
+          * 可以使用perporcessing.R進行生成。
+      * `ourdata_addFeatures5.csv`:保留原始第t-1天的數值資料，並增加特徵。
+  * 資料標準化:Scale value、min-max
+  * 資料切分:使用統一後一百筆為test data set，其餘data 進行5-flod cross validation。
 
 Describe every features in the final paper.
 
@@ -57,7 +63,8 @@ Describe every features in the final paper.
 * What is a null model for comparison?
     * Random Binomial Distribution
 * evaluation
-    * 5-fold cross validation
+    * Method:5-fold cross validation
+
 
 ### results
 
@@ -76,7 +83,7 @@ A little bit, but not for all kinds of models
 1.Data is not enough
 2.Don't how to deal with time series
 3.Aren't that familiar with financial data
-### future
+### Future Work
 1.Increase the amount of data
 2.Learn how to manage time series
 3.Watch more financial news in daily life
@@ -140,7 +147,6 @@ Rscript G1_LogisticRegression.R --fold 5 --input [dataset_path]  --report [repor
 ![test data](https://i.imgur.com/5cBUIgK.png)
 
 
-
 ### QDA
 
 ### NaiveBayes
@@ -151,11 +157,122 @@ Rscript G1_LogisticRegression.R --fold 5 --input [dataset_path]  --report [repor
 Rscript code/G1_DecisionTree.R --input data/ourdata.csv --output results/G1_Decision_tree.csv
 ```
 - step 1:先使用ourdata.csv作為訓練資料，將最後100筆切為最終測試資料
-- strp 2:剩下的資料進行three-way split
+- strp 2:剩下的資料進行three-way split(0.6,0.2,0.2)，再進行5-fold cross-validation
+
+- step 3:再把全部的測試資料拿去訓練模型並預測自身結果
+- step 4:最終再對最終測試資料進行預測，輸出結果
+- [export file](https://github.com/1101-datascience/finalproject-finalproject_group1/blob/main/results/G1_Decision_tree_without_diff.csv)
+
+ #### improvement
+```R=
+##Preprocessing##
+doc <- read.csv('ourdata.csv')
+
+##change class##
+doc$date..t. <- as.Date(doc$date..t.)
+doc$S_P_500_Close..t.1. <- gsub(',','',doc$S_P_500_Close..t.1.)
+doc$S_P_500_Close..t.1. <- as.numeric(doc$S_P_500_Close..t.1.)
+doc$total_net_tsmc..t.1. <- as.numeric(doc$total_net_tsmc..t.1.)
+doc$TAIEX..t. <- as.factor(doc$TAIEX..t.)
+doc$Bitcoin_Change...t.1. <- round(doc$Bitcoin_Change...t.1.,2)
+##creating columns##
+
+##function to calculate difference##
+fluctuate <- function(n){
+  diff=c()
+  for (i in 1:length(n)-1) {
+    diff[i]=round((n[i+1]-n[i])*100/n[i],2)
+  }
+  return(diff)
+}
+
+##difference in Dow_Jones##
+contain1 <- c(0.03)
+contain1 <- append(contain1,fluctuate(doc$Dow.Jones_Close..t.1.))
+doc$Dow.Jones_diff <- contain1
+
+##difference in NASDAQ##
+contain2 <- c(0.17)
+contain2 <- append(contain2,fluctuate(doc$NASDAQ_Close..t.1.))
+doc$NASDAQ_diff <- contain2
+
+##difference in S&P 500##
+contain3 <- c(0.33)
+contain3 <- append(contain3,fluctuate(doc$S_P_500_Close..t.1.))
+doc$S_P_500_diff <- contain3
+
+##difference in SOX##
+contain4 <- c(0.15)
+contain4 <- append(contain4,fluctuate(doc$SOX_Close..t.1.))
+doc$SOX_diff <- contain4
+
+##Selecting variables##
+doc2 <- doc[c(1,5,7,9,10,11,12,8)]
+```
+*    再讀進ourdata.csv後，先利用上述的code進行preprocessing,創造出漲跌幅的columns，然後只使用這些columns進行訓練及預測，訓練模型以及預測過程同上述之step 2~step 4。
+
+[improvement](https://github.com/1101-datascience/finalproject-finalproject_group1/blob/main/results/G1_Decision_tree.csv)
+
+[ROC Curve by 漲跌幅]
+![](https://i.imgur.com/wqz2nxz.jpg)
 
 
+### Random Forest
 
-### Random forest
+#### import
+````R=
+library('lattice')
+library('ggplot2')
+library('caret')
+library('randomForest')
+library('pROC')
+library('ROCR')
+````
+#### Data pre-processing
+:::info
+對data做min-max正規化
+:::
+#### Model 參數
+````R=
+rf_model <- randomForest(factor(TAIEX..t.) ~ .,
+		data = myTrainingData,mtry=2,
+		importance=TRUE, ntree=100, nodesize=7)
+````
+#### Rscript command
+- 使用`G1_RF.R`，按照以下方式執行:
+```` R
+Rscript G1_RF.R --fold 5 --input [dataset_path]  --report [report_path]
+````
+#### 步驟
+
+- Step1: 將資料最後100筆切為test data
+- Step2: 剩下的train data 拿去訓練以及5-fold cross validation(train/validation比例0.8: 0.2)
+- Step3: cross validation 結果
+
+|RF_Model|Train_AUC|Valid_AUC|Train_AC|Valid_AC|Train_Precision|Valid_Precision|Train_Recall|Valid_Recall|
+|:----|:----|:----|:----|:----|:----|:----|:----|:----|
+|fold1|0.96|0.91|0.87|0.83|0.86|0.84|0.91|0.87|
+|fold2|0.96|0.95|0.87|0.88|0.86|0.86|0.91|0.93|
+|fold3|0.96|0.95|0.87|0.9|0.86|0.92|0.91|0.89|
+|fold4|0.96|0.95|0.87|0.91|0.86|0.9|0.91|0.92|
+|fold5|0.96|0.95|0.87|0.89|0.86|0.9|0.91|0.89|
+|ave.|0.96|0.94|0.87|0.88|0.86|0.89|0.91|0.9|
+
+- Step4: 對整筆train data做訓練
+- Step5: 最終結果
+
+|TrainData|value|TestData|value|
+|:----|:----|:----|:----|
+|Accuracy|0.86|Accuracy|0.62|
+|Precision|0.85|Precision|0.62|
+|Recall|0.91|Recall|0.64|
+|AUC|0.96|AUC|0.61|
+
+#### AUC
+![train data](https://imgur.com/IsQlUi3.png)
+![test data](https://imgur.com/WKUXD0H.png)
+
+
 
 ### SVM
 
@@ -345,7 +462,6 @@ Rscript G1_SVM.R --train_path [dataset_path]  --report_path [report_path]
 
 
 > 整體而言，只有linear SVM 搭配漲跌幅可以提升模型預測之的表現結果。其餘實驗和null model表現較將近。
-
 
 
 ### **CNN & TCN**
@@ -636,7 +752,11 @@ library(gridExtra)
 library(shiny)
 library(DT)
 library("corrplot")
+<<<<<<< HEAD
+library(reactable
+=======
 library(reactable)
+>>>>>>> 6db7a0f1f7995254b16000d8effedae848e653ed
 ```
 
 ### Related publications
