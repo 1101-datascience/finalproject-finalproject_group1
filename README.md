@@ -61,7 +61,11 @@ Shiny:https://yungrujeng.shinyapps.io/finalproject-finalproject_group1
 ### data
 
 * Source
-
+	* Code/implementation which you include/reference (__You should indicate in your presentation if you use code for others. Otherwise, cheating will result in 0 score for final project.__)
+    * [Finmind api for total net of TSMC](https://finmind.github.io/tutor/TaiwanMarket/DataList/)
+    *    [雅虎財經 for 美股四大指數](https://hk.finance.yahoo.com/)
+    *    [比特幣](https://hk.investing.com/crypto/)
+    *    [台灣指數公司 for TAIEX](https://www.taiwanindex.com.tw/)
 * Preprocessing
   * `our_data.csv`將各指標轉為第(t-1)天的數值，以及第t天整體是否漲跌的lable。
   * Creating new features:
