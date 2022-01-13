@@ -1,3 +1,5 @@
+[TOC]
+
 # Group1. 以股為鏡--台股上漲預測
 
 ### Menbers
@@ -14,7 +16,7 @@
 ### Our Goal
 以美股四大指數和比特幣匯率等變數預測台股上市指數加權的漲或跌。(假設每天的股價沒有關聯)
 
-### Demo
+### Demo 
 You should provide an example commend to reproduce your result
 - 使用G1_DecisionTree.R，採以下指令執行
 ```R
@@ -33,25 +35,25 @@ Shiny:https://yungrujeng.shinyapps.io/finalproject-finalproject_group1
 
 * related document for the final project
   *  final paper
-
+  
 
 ### data
 
 * Source
-    *
+    * 
 * Any preprocessing?
   * `our_data.csv`將各指標轉為第(t-1)天的數值，以及第t天整體是否漲跌的lable。
   * Creating new features:
       * `only_diff.csv`:將指數轉換成漲跌幅百分比，並保留百分比捨棄原始資料。
-          * 可以使用perporcessing.R進行生成。
+          * 可以使用perporcessing.R進行生成。 
       * `ourdata_addFeatures5.csv`:保留原始第t-1天的數值資料，並增加特徵。
   * 資料標準化:Scale value、min-max
-  * 資料切分:使用統一後一百筆為test data set，其餘data 進行5-flod cross validation。
-
+  * Split datqa into Training Set,Valiidation Set,Test Set.
+  ![](https://i.imgur.com/VjX0L3J.png)
 Describe every features in the final paper.
 
 ### code
-
+    
 * Which method do you use?
     * Decision Tree
     * RandomForest
@@ -65,10 +67,10 @@ Describe every features in the final paper.
 * evaluation
     * Method:5-fold cross validation
 
-
+    
 ### results
 
-* Which metric do you use
+* Which metric do you use 
   * Precision
   * Accuracy
   * Recall
@@ -108,8 +110,8 @@ library(pROC)
 :::
 #### Model 參數
 ````R=
-model_reg <- glm(formula = TAIEX ~ .,
-                data=train_data,
+model_reg <- glm(formula = TAIEX ~ ., 
+                data=train_data, 
                 family=binomial(link="logit"))
 ````
 #### Rscript command
@@ -181,7 +183,7 @@ doc$Bitcoin_Change...t.1. <- round(doc$Bitcoin_Change...t.1.,2)
 fluctuate <- function(n){
   diff=c()
   for (i in 1:length(n)-1) {
-    diff[i]=round((n[i+1]-n[i])*100/n[i],2)
+    diff[i]=round((n[i+1]-n[i])*100/n[i],2) 
   }
   return(diff)
 }
@@ -216,7 +218,7 @@ doc2 <- doc[c(1,5,7,9,10,11,12,8)]
 [ROC Curve by 漲跌幅]
 ![](https://i.imgur.com/wqz2nxz.jpg)
 
-
+   
 ### Random Forest
 
 #### import
@@ -234,8 +236,8 @@ library('ROCR')
 :::
 #### Model 參數
 ````R=
-rf_model <- randomForest(factor(TAIEX..t.) ~ .,
-		data = myTrainingData,mtry=2,
+rf_model <- randomForest(factor(TAIEX..t.) ~ ., 
+		data = myTrainingData,mtry=2, 
 		importance=TRUE, ntree=100, nodesize=7)
 ````
 #### Rscript command
@@ -296,7 +298,7 @@ library(gridExtra)
 ````R=
 # in svm_best_linear_param.R
 # 調整kernal
-svmtune <-  tune(svm,TAIEX..t.~., data=train_data,probability=TRUE,scale = TRUE,
+svmtune <-  tune(svm,TAIEX..t.~., data=train_data,probability=TRUE,scale = TRUE, 
                  range=list(kernel=c("linear", "polynomial","radial"),cost=seq(0.2,1,0.2)),
                  tunecontrol=tune.control(sampling = "cross",cross = k,performances=TRUE))
 write.table(data.frame(svmtune$performances),file='results/SVM_tune_kernal_e1071.csv',quote=FALSE,sep=",",row.names=FALSE, na = "NA")
@@ -470,7 +472,7 @@ Rscript G1_SVM.R --train_path [dataset_path]  --report_path [report_path]
 ```r=
 library(keras)
 library(tensorflow)
-library(caret)
+library(caret) 
 library(pROC)
 ```
 
@@ -497,7 +499,7 @@ df[,6] <- (df[,6] - mean(df[,6])) / sd(df[,6])
 
 #### **Data Reshape**
 ```r=
-######################### Train
+######################### Train 
 x <- rbind(train_set_X[1:1541,], train_set_X[2:1542,], train_set_X[3:1543,], train_set_X[4:1544,], train_set_X[5:1545,], train_set_X[6:1546,], train_set_X[7:1547,], train_set_X[8:1548,], train_set_X[9:1549,], train_set_X[10:1550,], train_set_X[11:1551,], train_set_X[12:1552,])
 train_array_x <- array(x,dim=c(1541, 12, 6))
 
@@ -519,16 +521,16 @@ test_array_y <- array(testy[12:100],dim=c(89, 1))
 
 #### **TCN**
 ```r=
-model <- keras_model_sequential()
+model <- keras_model_sequential() 
 
 # TCN
-model %>%
-  layer_conv_1d(filters = 32, kernel_size = 2, activation = "relu",
-                input_shape = c(12,6)) %>%
-  layer_conv_1d(filters = 64, kernel_size = 2, dilation_rate=2, activation = "relu") %>%
-  layer_conv_1d(filters = 64, kernel_size = 2, dilation_rate=4, activation = "relu") %>%
-  layer_flatten() %>%
-  layer_dense(units = 64, activation = "relu") %>%
+model %>% 
+  layer_conv_1d(filters = 32, kernel_size = 2, activation = "relu", 
+                input_shape = c(12,6)) %>% 
+  layer_conv_1d(filters = 64, kernel_size = 2, dilation_rate=2, activation = "relu") %>% 
+  layer_conv_1d(filters = 64, kernel_size = 2, dilation_rate=4, activation = "relu") %>% 
+  layer_flatten() %>% 
+  layer_dense(units = 64, activation = "relu") %>% 
   layer_dense(units = 1, activation = "sigmoid")
 
 summary(model)
@@ -539,15 +541,15 @@ summary(model)
 
 ```r=
 #CNN
-model <- keras_model_sequential()
+model <- keras_model_sequential() 
 
-model %>%
-  layer_conv_1d(filters = 32, kernel_size = 2, activation = "relu",
-                input_shape = c(12,6)) %>%
-  layer_conv_1d(filters = 64, kernel_size = 2, activation = "relu") %>%
-  layer_conv_1d(filters = 64, kernel_size = 2, activation = "relu") %>%
-  layer_flatten() %>%
-  layer_dense(units = 64, activation = "relu") %>%
+model %>% 
+  layer_conv_1d(filters = 32, kernel_size = 2, activation = "relu", 
+                input_shape = c(12,6)) %>% 
+  layer_conv_1d(filters = 64, kernel_size = 2, activation = "relu") %>% 
+  layer_conv_1d(filters = 64, kernel_size = 2, activation = "relu") %>% 
+  layer_flatten() %>% 
+  layer_dense(units = 64, activation = "relu") %>% 
   layer_dense(units = 1, activation = "sigmoid")
 
 summary(model)
@@ -615,7 +617,7 @@ plot(roc(test_array_y,predict_y), print.auc=TRUE)
 ```r=
 library(keras)
 library(tensorflow)
-library(caret)
+library(caret) 
 library(pROC)
 ```
 
@@ -668,15 +670,15 @@ print(dim(test_array_y))
 #### **Build LSTM Model**
 ```r=
 model <- keras_model_sequential()
-model %>%
+model %>% 
   layer_lstm(units = 8, return_sequences = TRUE, stateful = TRUE,
-             batch_input_shape = c(1, 4, 6)) %>%
+             batch_input_shape = c(1, 4, 6)) %>% 
   layer_lstm(units = 16, return_sequences = TRUE, stateful = TRUE) %>%
   layer_dropout(rate = 0.3) %>%
   layer_lstm(units = 20, return_sequences = TRUE,stateful = TRUE) %>%
     layer_dropout(rate = 0.3) %>%
-  layer_lstm(units = 15, stateful = TRUE) %>%
-  layer_dense(units = 1, activation = 'sigmoid') %>%
+  layer_lstm(units = 15, stateful = TRUE) %>% 
+  layer_dense(units = 1, activation = 'sigmoid') %>% 
   compile(
     loss = 'binary_crossentropy',
     optimizer = optimizer_adam(learning_rate= 0.01 , decay = 1e-6 ),
@@ -752,9 +754,9 @@ library(gridExtra)
 library(shiny)
 library(DT)
 library("corrplot")
-library(reactable)
-
+library(reactable
 ```
 
 ### Related publications
 Tsmc.api.R (in code dictionary), this api was download from (https://finmind.github.io/), which is an open source, more details will show in final paper.
+
