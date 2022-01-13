@@ -61,21 +61,21 @@ Shiny:https://yungrujeng.shinyapps.io/finalproject-finalproject_group1
 ### data
 
 * Source
-    * 
-* Any preprocessing?
+
+* Preprocessing
   * `our_data.csv`將各指標轉為第(t-1)天的數值，以及第t天整體是否漲跌的lable。
   * Creating new features:
       * `only_diff.csv`:將指數轉換成漲跌幅百分比，並保留百分比捨棄原始資料。
           * 可以使用perporcessing.R進行生成。 
-      * `ourdata_addFeatures5.csv`:保留原始第t-1天的數值資料，並增加特徵。
+      * `ourdata_addFeatures5.csv`:保留原始第t-1天的數值資料，並增加特徵，如當日上漲的指標總數，logscale等等。
   * 資料標準化:Scale value、min-max
-  * Split datqa into Training Set,Valiidation Set,Test Set.
+  * Split data into Training Set,Valiidation Set,Test Set.
   ![](https://i.imgur.com/VjX0L3J.png)
-Describe every features in the final paper.
+  <br>
 
 ### code
     
-* Which method do you use?
+* Which method do we use?
     * Decision Tree
     * RandomForest
     * Support Vector Machine
