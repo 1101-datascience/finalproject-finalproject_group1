@@ -1,0 +1,12 @@
+ACC,train_ACC,validation_ACC,recall,train_recall,validation_recall,percion,training_p,validation_p,AUC,train_AUC,validation_AUC
+fold1,1,0.61,fold1,0.99,0.78,fold1,1,0.61,fold1,1,0.68
+fold2,0.99,0.61,fold2,0.99,0.8,fold2,0.99,0.6,fold2,1,0.65
+fold3,1,0.67,fold3,0.99,0.81,fold3,1,0.67,fold3,1,0.71
+fold4,1,0.59,fold4,1,0.84,fold4,1,0.57,fold4,1,0.69
+fold5,0.99,0.61,fold5,0.99,0.79,fold5,1,0.63,fold5,1,0.65
+ave.,0.99,0.62,ave.,0.99,0.8,ave.,1,0.62,ave.,1,0.68
+Mectrics,train,test
+ACC,0.995492594977463,0.51
+Percision,0.545924967658473,0.507246376811594
+Recall,0.7,0.7
+AUC,0.998666867389261,0.6008

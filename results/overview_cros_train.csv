@@ -1,0 +1,29 @@
+Model,Evaluation,value
+LogisiticRegression,Accuary,0.57
+SVM,Accuary,0.55
+RandomForest,Accuary,0.98
+Decision Tree,Accuary,0.67
+NaiveBayes,Accuary,0.55
+QDA,Accuary,0.58
+Null model,Accuary,0.5
+LogisiticRegression,Precision,0.55
+SVM,Precision,0.55
+RandomForest,Precision,0.98
+Decision Tree,Precision,0.67
+NaiveBayes,Precision,0.55
+QDA,Precision,0.83
+Null model,Precision,0.54
+LogisiticRegression,Recall,0.27
+SVM,Recall,1
+RandomForest,Recall,0.99
+Decision Tree,Recall,0.78
+NaiveBayes,Recall,0.87
+QDA,Recall,0.58
+Null model,Recall,0.5
+LogisiticRegression,AUC,0.54
+SVM,AUC,1
+RandomForest,AUC,1
+Decision Tree,AUC,0.69
+NaiveBayes,AUC,0.52
+QDA,AUC,0.57
+Null model,AUC,0.5
